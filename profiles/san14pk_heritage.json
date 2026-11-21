@@ -1,0 +1,108 @@
+{
+  "name": "三国志14 威力加强版 传承版 (风灵月影同款 43项布局)",
+  "game_version": "SAN14PK 传承版",
+  "process_names": [
+    "SAN14CE_SC.exe",
+    "SAN14CE_TC.exe",
+    "SAN14CE.exe",
+    "SAN14CE_KO.exe",
+    "SAN14PK.exe",
+    "SAN14.exe",
+    "San14PK_TC.exe",
+    "San14PK_SC.exe"
+  ],
+  "stat_dtype": "u8",
+  "tables": {
+    "global": {
+      "label": "全局与剧本 (Global)",
+      "base_address": "0x0",
+      "stride": "0x0",
+      "count": 1,
+      "fields": [
+        { "key": "inf_orders", "label": "无限命令书", "offset": "0x0", "dtype": "u16", "min_val": 0, "max_val": 999, "category": "全局", "hotkey": "Num 1", "mode": "toggle", "default_value": 99 },
+        { "key": "max_admin", "label": "最高施政等级", "offset": "0x4", "dtype": "u8", "min_val": 1, "max_val": 10, "category": "全局", "hotkey": "Num 2", "mode": "toggle", "default_value": 10 },
+        { "key": "inf_advocation", "label": "无限进言点数", "offset": "0x8", "dtype": "u16", "min_val": 0, "max_val": 999, "category": "全局", "hotkey": "Num 3", "mode": "toggle", "default_value": 99 },
+        { "key": "inf_mil_intel", "label": "无限军师点数", "offset": "0xC", "dtype": "u16", "min_val": 0, "max_val": 999, "category": "全局", "hotkey": "Num 4", "mode": "toggle", "default_value": 99 }
+      ]
+    },
+    "city": {
+      "label": "都市编辑 (City Editor)",
+      "base_address": "0x0",
+      "stride": "0x100",
+      "count": 46,
+      "fields": [
+        { "key": "city_durability", "label": "都市耐久", "offset": "0x0", "dtype": "u16", "min_val": 0, "max_val": 60000, "category": "都市", "hotkey": "Ctrl + Num 1", "mode": "edit", "default_value": 10000 },
+        { "key": "city_morale", "label": "都市士气", "offset": "0x2", "dtype": "u16", "min_val": 0, "max_val": 200, "category": "都市", "hotkey": "Ctrl + Num 2", "mode": "edit", "default_value": 100 },
+        { "key": "city_gold", "label": "都市资金", "offset": "0x4", "dtype": "u32", "min_val": 0, "max_val": 9999999, "category": "都市", "hotkey": "Ctrl + Num 3", "mode": "edit", "default_value": 50000 },
+        { "key": "city_food", "label": "都市兵粮", "offset": "0x8", "dtype": "u32", "min_val": 0, "max_val": 9999999, "category": "都市", "hotkey": "Ctrl + Num 4", "mode": "edit", "default_value": 100000 },
+        { "key": "city_troops", "label": "都市士兵", "offset": "0xC", "dtype": "u32", "min_val": 0, "max_val": 999999, "category": "都市", "hotkey": "Ctrl + Num 5", "mode": "edit", "default_value": 100000 },
+        { "key": "city_wounded", "label": "都市伤兵", "offset": "0x10", "dtype": "u32", "min_val": 0, "max_val": 999999, "category": "都市", "hotkey": "Ctrl + Num 6", "mode": "edit", "default_value": 0 },
+        { "key": "city_provoked", "label": "挑衅剩余天数", "offset": "0x14", "dtype": "u8", "min_val": 0, "max_val": 63, "category": "都市", "hotkey": "Ctrl + Num 7", "mode": "edit", "default_value": 0 },
+        { "key": "city_disorder", "label": "混乱剩余天数", "offset": "0x15", "dtype": "u8", "min_val": 0, "max_val": 63, "category": "都市", "hotkey": "Ctrl + Num 8", "mode": "edit", "default_value": 0 },
+        { "key": "city_scale", "label": "都市规模 (1-4)", "offset": "0x16", "dtype": "u8", "min_val": 1, "max_val": 4, "category": "都市", "hotkey": "Ctrl + Num 9", "mode": "edit", "default_value": 4 }
+      ]
+    },
+    "officer": {
+      "label": "武将编辑 (Officer Editor)",
+      "base_address": "0x0",
+      "stride": "0x100",
+      "count": 50,
+      "fields": [
+        { "key": "leadership", "label": "统率", "offset": "0x0", "dtype": "u8", "min_val": 1, "max_val": 120, "category": "五维属性", "hotkey": "Alt + Num 1", "mode": "edit", "default_value": 100 },
+        { "key": "war", "label": "武力", "offset": "0x1", "dtype": "u8", "min_val": 1, "max_val": 120, "category": "五维属性", "hotkey": "Alt + Num 2", "mode": "edit", "default_value": 100 },
+        { "key": "intelligence", "label": "智力", "offset": "0x2", "dtype": "u8", "min_val": 1, "max_val": 120, "category": "五维属性", "hotkey": "Alt + Num 3", "mode": "edit", "default_value": 100 },
+        { "key": "politics", "label": "政治", "offset": "0x3", "dtype": "u8", "min_val": 1, "max_val": 120, "category": "五维属性", "hotkey": "Alt + Num 4", "mode": "edit", "default_value": 100 },
+        { "key": "charm", "label": "魅力", "offset": "0x4", "dtype": "u8", "min_val": 1, "max_val": 120, "category": "五维属性", "hotkey": "Alt + Num 5", "mode": "edit", "default_value": 100 },
+        { "key": "loyalty", "label": "忠诚度", "offset": "0x8", "dtype": "u8", "min_val": 0, "max_val": 255, "category": "状态", "hotkey": "Alt + Num 6", "mode": "edit", "default_value": 100 },
+        { "key": "policy_lv", "label": "施政等级", "offset": "0x9", "dtype": "u8", "min_val": 1, "max_val": 10, "category": "状态", "hotkey": "Alt + Num 7", "mode": "edit", "default_value": 10 },
+        { "key": "max_cap", "label": "突破能力上限", "offset": "0xA", "dtype": "u8", "min_val": 0, "max_val": 1, "category": "状态", "hotkey": "Alt + Num 8", "mode": "toggle", "default_value": 1 },
+        { "key": "birth_year", "label": "出生年份", "offset": "-0x8", "dtype": "u16", "min_val": 100, "max_val": 400, "category": "生平", "hotkey": "Alt + Num 9", "mode": "edit", "default_value": 180 },
+        { "key": "illness", "label": "伤病状态 (0-3)", "offset": "0xB", "dtype": "u8", "min_val": 0, "max_val": 3, "category": "状态", "hotkey": "Alt + Num 0", "mode": "edit", "default_value": 0 }
+      ]
+    },
+    "area": {
+      "label": "地区编辑 (Area Editor)",
+      "base_address": "0x0",
+      "stride": "0x40",
+      "count": 46,
+      "fields": [
+        { "key": "area_commerce", "label": "商业开发", "offset": "0x0", "dtype": "u16", "min_val": 0, "max_val": 1000, "category": "地区", "hotkey": "Ctrl + F1", "mode": "edit", "default_value": 1000 },
+        { "key": "area_agri", "label": "农业开发", "offset": "0x2", "dtype": "u16", "min_val": 0, "max_val": 1000, "category": "地区", "hotkey": "Ctrl + F2", "mode": "edit", "default_value": 1000 },
+        { "key": "area_barracks", "label": "兵舍开发", "offset": "0x4", "dtype": "u16", "min_val": 0, "max_val": 1000, "category": "地区", "hotkey": "Ctrl + F3", "mode": "edit", "default_value": 1000 },
+        { "key": "area_pop", "label": "地区人口", "offset": "0x8", "dtype": "u16", "min_val": 0, "max_val": 65535, "category": "地区", "hotkey": "Ctrl + F4", "mode": "edit", "default_value": 50000 },
+        { "key": "area_order", "label": "地区治安", "offset": "0xC", "dtype": "u8", "min_val": 0, "max_val": 100, "category": "地区", "hotkey": "Ctrl + F5", "mode": "edit", "default_value": 100 },
+        { "key": "area_build_cap", "label": "建设上限", "offset": "0xE", "dtype": "u8", "min_val": 1, "max_val": 99, "category": "地区", "hotkey": "Ctrl + F6", "mode": "edit", "default_value": 10 }
+      ]
+    },
+    "gate": {
+      "label": "关隘编辑 (Gate Editor)",
+      "base_address": "0x0",
+      "stride": "0x80",
+      "count": 12,
+      "fields": [
+        { "key": "gate_durability", "label": "关隘耐久", "offset": "0x0", "dtype": "u16", "min_val": 0, "max_val": 60000, "category": "关隘", "hotkey": "Ctrl + F7", "mode": "edit", "default_value": 10000 },
+        { "key": "gate_morale", "label": "关隘士气", "offset": "0x2", "dtype": "u16", "min_val": 0, "max_val": 200, "category": "关隘", "hotkey": "Ctrl + F8", "mode": "edit", "default_value": 100 },
+        { "key": "gate_troops", "label": "关隘士兵", "offset": "0x4", "dtype": "u32", "min_val": 0, "max_val": 999999, "category": "关隘", "hotkey": "Ctrl + F9", "mode": "edit", "default_value": 50000 },
+        { "key": "gate_wounded", "label": "关隘伤兵", "offset": "0x8", "dtype": "u32", "min_val": 0, "max_val": 999999, "category": "关隘", "hotkey": "Ctrl + F10", "mode": "edit", "default_value": 0 },
+        { "key": "gate_provoked", "label": "挑衅剩余天数", "offset": "0xC", "dtype": "u8", "min_val": 0, "max_val": 90, "category": "关隘", "hotkey": "Ctrl + F11", "mode": "edit", "default_value": 0 },
+        { "key": "gate_disorder", "label": "混乱剩余天数", "offset": "0xD", "dtype": "u8", "min_val": 0, "max_val": 90, "category": "关隘", "hotkey": "Ctrl + F12", "mode": "edit", "default_value": 0 }
+      ]
+    },
+    "unit": {
+      "label": "部队编辑 (Unit Editor)",
+      "base_address": "0x0",
+      "stride": "0x120",
+      "count": 30,
+      "fields": [
+        { "key": "unit_morale", "label": "部队士气", "offset": "0x0", "dtype": "u16", "min_val": 0, "max_val": 200, "category": "部队", "hotkey": "Alt + F5", "mode": "edit", "default_value": 100 },
+        { "key": "unit_troops", "label": "部队士兵", "offset": "0x4", "dtype": "u32", "min_val": 0, "max_val": 200000, "category": "部队", "hotkey": "Alt + F6", "mode": "edit", "default_value": 20000 },
+        { "key": "unit_wounded", "label": "部队伤兵", "offset": "0x8", "dtype": "u32", "min_val": 0, "max_val": 200000, "category": "部队", "hotkey": "Alt + F7", "mode": "edit", "default_value": 0 },
+        { "key": "unit_provoked", "label": "挑衅剩余天数", "offset": "0xC", "dtype": "u8", "min_val": 0, "max_val": 90, "category": "部队", "hotkey": "Alt + F8", "mode": "edit", "default_value": 0 },
+        { "key": "unit_disorder", "label": "混乱剩余天数", "offset": "0xD", "dtype": "u8", "min_val": 0, "max_val": 90, "category": "部队", "hotkey": "Alt + F9", "mode": "edit", "default_value": 0 },
+        { "key": "unit_restrained", "label": "止步剩余天数", "offset": "0xE", "dtype": "u8", "min_val": 0, "max_val": 90, "category": "部队", "hotkey": "Alt + F10", "mode": "edit", "default_value": 0 },
+        { "key": "unit_gold", "label": "部队携带资金", "offset": "0x10", "dtype": "u32", "min_val": 0, "max_val": 9999999, "category": "部队", "hotkey": "Alt + F11", "mode": "edit", "default_value": 10000 },
+        { "key": "unit_food", "label": "部队携带兵粮", "offset": "0x14", "dtype": "u32", "min_val": 0, "max_val": 9999999, "category": "部队", "hotkey": "Alt + F12", "mode": "edit", "default_value": 30000 }
+      ]
+    }
+  }
+}

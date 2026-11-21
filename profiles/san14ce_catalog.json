@@ -1,0 +1,2958 @@
+{
+  "game_version": "SAN14CE_SC",
+  "source": "fixdataexce.s14",
+  "traits": [
+    {
+      "id": 1,
+      "name": "莽撞",
+      "pinyin": "Mangzhuang",
+      "color": 2,
+      "description": "在命令设定中无法选择：敌接近时【无视】，自主撤退【许可】"
+    },
+    {
+      "id": 2,
+      "name": "胆小",
+      "pinyin": "Danxiao",
+      "color": 2,
+      "description": "在命令设定中无法选择：敌人接近时【攻击】，自主撤退【不可】，追击【许可】"
+    },
+    {
+      "id": 3,
+      "name": "功名",
+      "pinyin": "Gongming",
+      "color": 2,
+      "description": "在命令设定中无法选择：追击【不可】，事后命令【撤退】"
+    },
+    {
+      "id": 4,
+      "name": "疾走",
+      "pinyin": "Jizou",
+      "color": 1,
+      "description": "自部队的机动上升（舰船、兵器除外）"
+    },
+    {
+      "id": 5,
+      "name": "扫荡",
+      "pinyin": "Saotao",
+      "color": 1,
+      "description": "自部队的攻军上升（舰船、兵器除外）"
+    },
+    {
+      "id": 6,
+      "name": "远矢",
+      "pinyin": "Yuanshi",
+      "color": 1,
+      "description": "自部队的攻城上升（舰船、兵器除外）"
+    },
+    {
+      "id": 7,
+      "name": "坚守",
+      "pinyin": "Jianshou",
+      "color": 1,
+      "description": "自部队的防御上升（舰船、兵器除外）"
+    },
+    {
+      "id": 8,
+      "name": "摧墙",
+      "pinyin": "Bengbi",
+      "color": 1,
+      "description": "自部队的破城上升（舰船、兵器除外）"
+    },
+    {
+      "id": 9,
+      "name": "发明",
+      "pinyin": "Faming",
+      "color": 1,
+      "description": "自部队的阵形为兵器时，攻城与破城上升"
+    },
+    {
+      "id": 10,
+      "name": "骁将",
+      "pinyin": "Xiaojiang",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队的攻军上升（舰船、兵器除外）"
+    },
+    {
+      "id": 11,
+      "name": "勇将",
+      "pinyin": "Yongjiang",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队的攻城上升（舰船、兵器除外）"
+    },
+    {
+      "id": 12,
+      "name": "强将",
+      "pinyin": "Gangjiang",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队的防御上升（舰船、兵器除外）"
+    },
+    {
+      "id": 13,
+      "name": "督将",
+      "pinyin": "Dujiang",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队的破城上升（舰船、兵器除外）"
+    },
+    {
+      "id": 14,
+      "name": "奸雄",
+      "pinyin": "Jianxiong",
+      "color": 3,
+      "description": "除自部队之外，特定范围内的自势力部队的全能力上升（舰船、兵器除外）"
+    },
+    {
+      "id": 15,
+      "name": "机智",
+      "pinyin": "Jilue",
+      "color": 1,
+      "description": "特定范围内的敌方部队的攻军下降（舰船、兵器除外）"
+    },
+    {
+      "id": 16,
+      "name": "诡计",
+      "pinyin": "Guiji",
+      "color": 1,
+      "description": "特定范围内的敌方部队的攻城下降（舰船、兵器除外）"
+    },
+    {
+      "id": 17,
+      "name": "妙算",
+      "pinyin": "Miaosuan",
+      "color": 1,
+      "description": "特定范围内的敌方部队的防御下降（舰船、兵器除外）"
+    },
+    {
+      "id": 18,
+      "name": "诈谋",
+      "pinyin": "Zhamou",
+      "color": 1,
+      "description": "特定范围内的敌方部队的破城下降（舰船、兵器除外）"
+    },
+    {
+      "id": 19,
+      "name": "枭雄",
+      "pinyin": "Xiaoxiong",
+      "color": 3,
+      "description": "特定范围内的敌方部队的全能力下降（舰船、兵器除外）"
+    },
+    {
+      "id": 20,
+      "name": "长驱",
+      "pinyin": "Changqu",
+      "color": 1,
+      "description": "自部队的士气不易下降"
+    },
+    {
+      "id": 21,
+      "name": "求心",
+      "pinyin": "Qiuxin",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队不易降低士气"
+    },
+    {
+      "id": 22,
+      "name": "威风",
+      "pinyin": "Weifeng",
+      "color": 1,
+      "description": "特定范围内的敌方部队士气容易下降，下一回合开始时敌方部队士气下降"
+    },
+    {
+      "id": 23,
+      "name": "奏乐",
+      "pinyin": "Yuezou",
+      "color": 1,
+      "description": "下一回合开始时，除自部队之外的特定范围内的自势力部队士气上升"
+    },
+    {
+      "id": 24,
+      "name": "幻术",
+      "pinyin": "Huanshu",
+      "color": 1,
+      "description": "下一回合开始时，特定范围内的敌方部队士气下降"
+    },
+    {
+      "id": 25,
+      "name": "一心",
+      "pinyin": "Yixin",
+      "color": 1,
+      "description": "自部队受到攻击时士气不易下降"
+    },
+    {
+      "id": 26,
+      "name": "昂扬",
+      "pinyin": "Anyang",
+      "color": 1,
+      "description": "击破特定范围内的敌方部队时，自部队士气上升"
+    },
+    {
+      "id": 27,
+      "name": "诗韵",
+      "pinyin": "Shixiang",
+      "color": 1,
+      "description": "击败特定范围内的敌部队时，除自部队之外，范围内的自势力部队士气上升"
+    },
+    {
+      "id": 28,
+      "name": "怒发",
+      "pinyin": "Nufa",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队毁灭时，自部队士气上升"
+    },
+    {
+      "id": 29,
+      "name": "消沉",
+      "pinyin": "Xiaochen",
+      "color": 2,
+      "description": "除自部队之外，特定范围内的自势力部队毁灭时，自部队士气下降"
+    },
+    {
+      "id": 30,
+      "name": "节约",
+      "pinyin": "Jieyue",
+      "color": 1,
+      "description": "自部队的兵粮消耗减少"
+    },
+    {
+      "id": 31,
+      "name": "浪费",
+      "pinyin": "Langfei",
+      "color": 2,
+      "description": "自部队的兵粮消耗增加"
+    },
+    {
+      "id": 32,
+      "name": "屯田",
+      "pinyin": "Tuntian",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队的兵粮消耗减少"
+    },
+    {
+      "id": 33,
+      "name": "不屈",
+      "pinyin": "Buqu",
+      "color": 1,
+      "description": "兵站断绝时，自部队的防御上升，士气不易下降"
+    },
+    {
+      "id": 34,
+      "name": "惊慌",
+      "pinyin": "Jinghuang",
+      "color": 2,
+      "description": "兵站断绝时，自部队的士气容易下降"
+    },
+    {
+      "id": 35,
+      "name": "酒疯",
+      "pinyin": "Jiufeng",
+      "color": 2,
+      "description": "兵站断绝时，自部队的全能力下降"
+    },
+    {
+      "id": 36,
+      "name": "泰然",
+      "pinyin": "Tairan",
+      "color": 1,
+      "description": "兵站断绝时，自部队不会陷入状态异常"
+    },
+    {
+      "id": 37,
+      "name": "洞察",
+      "pinyin": "Dongcha",
+      "color": 3,
+      "description": "自部队、身为太守所在的据点不会陷入状态异常"
+    },
+    {
+      "id": 38,
+      "name": "守纪",
+      "pinyin": "Guilv",
+      "color": 1,
+      "description": "自部队、身为太守所在的据点不会陷入异常状态【混乱】"
+    },
+    {
+      "id": 39,
+      "name": "果敢",
+      "pinyin": "Guogan",
+      "color": 1,
+      "description": "自部队不会陷入异常状态【止步】"
+    },
+    {
+      "id": 40,
+      "name": "沉着",
+      "pinyin": "Chenzhuo",
+      "color": 1,
+      "description": "自部队、身为太守所在的据点不会陷入异常状态【挑衅】"
+    },
+    {
+      "id": 41,
+      "name": "短虑",
+      "pinyin": "Duanlv",
+      "color": 2,
+      "description": "延长自部队、身为太守所在的据点陷入状态异常的时间"
+    },
+    {
+      "id": 42,
+      "name": "鲁莽",
+      "pinyin": "Cuhu",
+      "color": 2,
+      "description": "延长自部队、身为太守所在的据点陷入异常状态【混乱】的时间"
+    },
+    {
+      "id": 43,
+      "name": "优柔",
+      "pinyin": "Yourou",
+      "color": 2,
+      "description": "延长自部队陷入异常状态【止步】的时间"
+    },
+    {
+      "id": 44,
+      "name": "暴躁",
+      "pinyin": "Baozao",
+      "color": 2,
+      "description": "延长自部队、身为太守所在的据点陷入异常状态【挑衅】的时间"
+    },
+    {
+      "id": 45,
+      "name": "明镜",
+      "pinyin": "Mingjing",
+      "color": 1,
+      "description": "除自部队之外，缩短特定范围内的自势力部队陷入异常状态【混乱】的时间"
+    },
+    {
+      "id": 46,
+      "name": "督厉",
+      "pinyin": "Duli",
+      "color": 1,
+      "description": "除自部队之外，缩短特定范围内的自势力部队陷入异常状态【止步】的时间"
+    },
+    {
+      "id": 47,
+      "name": "谏止",
+      "pinyin": "Jianzhi",
+      "color": 1,
+      "description": "除自部队之外，缩短特定范围内的自势力部队陷入异常状态【挑衅】的时间"
+    },
+    {
+      "id": 48,
+      "name": "神眼",
+      "pinyin": "Shenyan",
+      "color": 3,
+      "description": "除自部队之外，缩短特定范围内的自势力部队陷入异常状态的时间"
+    },
+    {
+      "id": 49,
+      "name": "煽动",
+      "pinyin": "Shandong",
+      "color": 1,
+      "description": "延长特定范围内的敌方部队陷入异常状态【混乱】的时间"
+    },
+    {
+      "id": 50,
+      "name": "封杀",
+      "pinyin": "Fengsha",
+      "color": 1,
+      "description": "延长特定范围内的敌方部队陷入异常状态【止步】的时间"
+    },
+    {
+      "id": 51,
+      "name": "言毒",
+      "pinyin": "Yandu",
+      "color": 1,
+      "description": "延长特定范围内的敌方部队陷入异常状态【挑衅】的时间"
+    },
+    {
+      "id": 52,
+      "name": "虚实",
+      "pinyin": "Xushi",
+      "color": 3,
+      "description": "延长特定范围内的敌方部队陷入异常状态的时间"
+    },
+    {
+      "id": 53,
+      "name": "火神",
+      "pinyin": "Huoshen",
+      "color": 3,
+      "description": "自部队、身为太守所在的城市不会受到火的影响，【火计】必定成功"
+    },
+    {
+      "id": 54,
+      "name": "火攻",
+      "pinyin": "Huogong",
+      "color": 1,
+      "description": "自部队、身为太守所在的城市受到的火的伤害减少，【火计】成功率上升"
+    },
+    {
+      "id": 55,
+      "name": "破陷",
+      "pinyin": "Jingpo",
+      "color": 1,
+      "description": "自部队进入敌方势力的陷阱效果范围内时，可解除其陷阱"
+    },
+    {
+      "id": 56,
+      "name": "慎重",
+      "pinyin": "Shenzhong",
+      "color": 1,
+      "description": "减少敌方势力陷阱所带来的伤害"
+    },
+    {
+      "id": 57,
+      "name": "直率",
+      "pinyin": "Zhiqing",
+      "color": 2,
+      "description": "增加敌方势力陷阱所带来的伤害"
+    },
+    {
+      "id": 58,
+      "name": "筑城",
+      "pinyin": "Zhucheng",
+      "color": 1,
+      "description": "自部队的陷阱与设施的建设速度上升"
+    },
+    {
+      "id": 59,
+      "name": "英名",
+      "pinyin": "Yingming",
+      "color": 1,
+      "description": "减少自部队扩大占领范围所需的士兵数"
+    },
+    {
+      "id": 60,
+      "name": "恶名",
+      "pinyin": "Eming",
+      "color": 2,
+      "description": "增加自部队扩大占领范围所需的士兵数"
+    },
+    {
+      "id": 61,
+      "name": "豪杰",
+      "pinyin": "Haojie",
+      "color": 1,
+      "description": "容易发生单挑"
+    },
+    {
+      "id": 62,
+      "name": "一骑",
+      "pinyin": "Yiqi",
+      "color": 1,
+      "description": "容易发生单挑，在单挑时获得优势"
+    },
+    {
+      "id": 63,
+      "name": "调配",
+      "pinyin": "Tiaoda",
+      "color": 1,
+      "description": "率领输送部队时，可输送量增加"
+    },
+    {
+      "id": 64,
+      "name": "运输",
+      "pinyin": "Yunban",
+      "color": 1,
+      "description": "率领输送部队时，机动上升"
+    },
+    {
+      "id": 65,
+      "name": "使役",
+      "pinyin": "Shiyi",
+      "color": 1,
+      "description": "位于府时，自部队的全能力上升"
+    },
+    {
+      "id": 66,
+      "name": "再起",
+      "pinyin": "Zaiqi",
+      "color": 1,
+      "description": "位于府上时，下一回合开始时恢复自部队的伤兵"
+    },
+    {
+      "id": 67,
+      "name": "飞将",
+      "pinyin": "Feijiang",
+      "color": 3,
+      "description": "移动时在大河以外的全地形不受敌方影响，无视包围效果（舰船、兵器除外）"
+    },
+    {
+      "id": 68,
+      "name": "水战",
+      "pinyin": "Shuizhan",
+      "color": 1,
+      "description": "在大河，自部队的全能力上升"
+    },
+    {
+      "id": 69,
+      "name": "山战",
+      "pinyin": "Shanzhan",
+      "color": 1,
+      "description": "在矮山、中山、高山、山路时，自部队的全能力上升"
+    },
+    {
+      "id": 70,
+      "name": "林战",
+      "pinyin": "Senzhan",
+      "color": 1,
+      "description": "在森林、密林时，自部队的全能力上升"
+    },
+    {
+      "id": 71,
+      "name": "乌桓",
+      "pinyin": "Wuhuan",
+      "color": 1,
+      "description": "在矮山、中山、高山、山路时，自部队的全能力上升"
+    },
+    {
+      "id": 72,
+      "name": "鲜卑",
+      "pinyin": "Xianbei",
+      "color": 1,
+      "description": "在矮山、中山、高山、山路时，自部队的全能力上升"
+    },
+    {
+      "id": 73,
+      "name": "匈奴",
+      "pinyin": "Xiongnu",
+      "color": 1,
+      "description": "在矮山、中山、高山、山路时，自部队的全能力上升"
+    },
+    {
+      "id": 74,
+      "name": "羌氐",
+      "pinyin": "Qiangliang",
+      "color": 1,
+      "description": "在矮山、中山、高山、山路时，自部队的全能力上升"
+    },
+    {
+      "id": 75,
+      "name": "山越",
+      "pinyin": "Shanyue",
+      "color": 1,
+      "description": "在森林、密林、湿地、浅滩、河川时，自部队的全能力上升"
+    },
+    {
+      "id": 76,
+      "name": "南中",
+      "pinyin": "Nanman",
+      "color": 1,
+      "description": "在森林、密林，自部队的全能力上升"
+    },
+    {
+      "id": 77,
+      "name": "解毒",
+      "pinyin": "Jiedu",
+      "color": 1,
+      "description": "不会受到毒的影响"
+    },
+    {
+      "id": 78,
+      "name": "藤甲",
+      "pinyin": "Tengjia",
+      "color": 1,
+      "description": "火以外的伤害减半，火的伤害增加至3倍"
+    },
+    {
+      "id": 79,
+      "name": "黄巾",
+      "pinyin": "Huangjin",
+      "color": 0,
+      "description": "若所属于张角为君主的势力，在张角出阵时，自部队全能力上升"
+    },
+    {
+      "id": 80,
+      "name": "贼徒",
+      "pinyin": "Zeitu",
+      "color": 2,
+      "description": "位于府上时，下一回合开始时该区域的治安下降"
+    },
+    {
+      "id": 81,
+      "name": "石兵",
+      "pinyin": "Shibing",
+      "color": 1,
+      "description": "可以建造石兵八阵"
+    },
+    {
+      "id": 82,
+      "name": "敬关",
+      "pinyin": "Jingguan",
+      "color": 0,
+      "description": "若与关羽所属于同一势力，在关羽出阵时，自部队全能力上升"
+    },
+    {
+      "id": 83,
+      "name": "镇压",
+      "pinyin": "Zhenya",
+      "color": 0,
+      "description": "特定范围内的敌方部队是异族时，易于降低其士气"
+    },
+    {
+      "id": 84,
+      "name": "勇士",
+      "pinyin": "Mengzhe",
+      "color": 1,
+      "description": "容易使敌方武将负伤、战死"
+    },
+    {
+      "id": 85,
+      "name": "捕缚",
+      "pinyin": "Fuhuo",
+      "color": 1,
+      "description": "容易俘虏敌方武将"
+    },
+    {
+      "id": 86,
+      "name": "护卫",
+      "pinyin": "Huwei",
+      "color": 1,
+      "description": "除自身之外，特定范围内的己方武将不会负伤、战死。如果体力充沛，还会代为单挑"
+    },
+    {
+      "id": 87,
+      "name": "血路",
+      "pinyin": "Xuelu",
+      "color": 1,
+      "description": "除自身之外，特定范围内的己方武将不会遭到俘虏"
+    },
+    {
+      "id": 88,
+      "name": "强运",
+      "pinyin": "Qiangyun",
+      "color": 1,
+      "description": "自身不会负伤、战死，不会被俘"
+    },
+    {
+      "id": 89,
+      "name": "美名",
+      "pinyin": "Meiming",
+      "color": 0,
+      "description": "对自部队的区域支援效果影响大"
+    },
+    {
+      "id": 90,
+      "name": "恶名",
+      "pinyin": "Eming",
+      "color": 0,
+      "description": "对自部队的区域支援效果影响小"
+    },
+    {
+      "id": 91,
+      "name": "地利",
+      "pinyin": "Dili",
+      "color": 1,
+      "description": "位于己方势力的区域时，自部队全能力上升"
+    },
+    {
+      "id": 92,
+      "name": "胆量",
+      "pinyin": "Danli",
+      "color": 1,
+      "description": "在一定兵数以下时，自部队全能力上升"
+    },
+    {
+      "id": 93,
+      "name": "傲慢",
+      "pinyin": "Gaoman",
+      "color": 2,
+      "description": "一定兵数以下时，自部队的全能力下降"
+    },
+    {
+      "id": 94,
+      "name": "倾国",
+      "pinyin": "Qingguo",
+      "color": 1,
+      "description": "特定范围内的敌方部队（男）的全能力下降"
+    },
+    {
+      "id": 95,
+      "name": "才媛",
+      "pinyin": "Caiyuan",
+      "color": 1,
+      "description": "延长特定范围内的敌方部队（男）陷入异常状态的时间"
+    },
+    {
+      "id": 96,
+      "name": "支援",
+      "pinyin": "Yingyuan",
+      "color": 1,
+      "description": "除自部队之外，特定范围内的自势力部队（男）的全能力上升"
+    },
+    {
+      "id": 97,
+      "name": "脱兔",
+      "pinyin": "Tuotu",
+      "color": 3,
+      "description": "撤退时自部队的机动上升，无视敌方影响（舰船、兵器除外）"
+    },
+    {
+      "id": 98,
+      "name": "殿军",
+      "pinyin": "Dianjun",
+      "color": 1,
+      "description": "撤退时，自部队的防御上升"
+    },
+    {
+      "id": 99,
+      "name": "懦弱",
+      "pinyin": "Duoruo",
+      "color": 2,
+      "description": "撤退时，自部队的全能力下降"
+    },
+    {
+      "id": 100,
+      "name": "调停",
+      "pinyin": "Tiaoting",
+      "color": 0,
+      "description": "容易与特定范围内的自势力部队发生合作"
+    },
+    {
+      "id": 101,
+      "name": "恣意",
+      "pinyin": "Ziyi",
+      "color": 0,
+      "description": "与特定范围内的己方部队不易发生合作"
+    },
+    {
+      "id": 102,
+      "name": "辅佐",
+      "pinyin": "Fuzuo",
+      "color": 0,
+      "description": "自己容易加入合作（厌恶武将除外）"
+    },
+    {
+      "id": 103,
+      "name": "慈悲",
+      "pinyin": "Cibei",
+      "color": 0,
+      "description": "不分敌我，难以击杀士兵（对伤兵容易）"
+    },
+    {
+      "id": 104,
+      "name": "粗暴",
+      "pinyin": "Cubao",
+      "color": 0,
+      "description": "不分敌我，难以击杀士兵（对伤兵不易）"
+    },
+    {
+      "id": 105,
+      "name": "任才",
+      "pinyin": "Rencai",
+      "color": 3,
+      "description": "特定范围内己方部队数量多时，自部队的全能力上升"
+    },
+    {
+      "id": 106,
+      "name": "神威",
+      "pinyin": "Shenwei",
+      "color": 3,
+      "description": "特定范围内的敌部队数量多时，自部队的全能力上升"
+    },
+    {
+      "id": 107,
+      "name": "黄天",
+      "pinyin": "Huangtian",
+      "color": 3,
+      "description": "下一回合开始时，除自部队之外，恢复特定范围内的自势力部队的伤兵"
+    },
+    {
+      "id": 108,
+      "name": "斗将",
+      "pinyin": "Doujiang",
+      "color": 3,
+      "description": "自部队不受包围效果的影响"
+    },
+    {
+      "id": 109,
+      "name": "名声",
+      "pinyin": "Mingsheng",
+      "color": 1,
+      "description": "任命区域官员，则土地占领扩大、俘虏的赎金增加"
+    },
+    {
+      "id": 110,
+      "name": "振兴",
+      "pinyin": "Zhenxing",
+      "color": 1,
+      "description": "任命为区域官员时，开发容易上升"
+    },
+    {
+      "id": 111,
+      "name": "法律",
+      "pinyin": "Falv",
+      "color": 1,
+      "description": "任命为区域官员时，治安容易上升"
+    },
+    {
+      "id": 112,
+      "name": "文化",
+      "pinyin": "Wenhua",
+      "color": 1,
+      "description": "任命为区域官员时，人口容易上升"
+    },
+    {
+      "id": 113,
+      "name": "征税",
+      "pinyin": "Zhengshui",
+      "color": 1,
+      "description": "担任区域官员时，资金容易上升"
+    },
+    {
+      "id": 114,
+      "name": "农政",
+      "pinyin": "Nongzheng",
+      "color": 1,
+      "description": "担任区域官员时，兵粮容易上升"
+    },
+    {
+      "id": 115,
+      "name": "教化",
+      "pinyin": "Jiaohua",
+      "color": 1,
+      "description": "担任区域官员时，士兵容易上升"
+    },
+    {
+      "id": 116,
+      "name": "能吏",
+      "pinyin": "Nengli",
+      "color": 1,
+      "description": "任命为区域官员时，花费的费用减少"
+    },
+    {
+      "id": 117,
+      "name": "招募",
+      "pinyin": "Zhaomu",
+      "color": 1,
+      "description": "任命为募兵官员时，士兵容易上升"
+    },
+    {
+      "id": 118,
+      "name": "操练",
+      "pinyin": "Diaolian",
+      "color": 1,
+      "description": "任命为训练官员时，士气容易上升"
+    },
+    {
+      "id": 119,
+      "name": "人脉",
+      "pinyin": "Renmai",
+      "color": 1,
+      "description": "擢用、探索所需的天数缩短"
+    },
+    {
+      "id": 120,
+      "name": "眼力",
+      "pinyin": "Yanguang",
+      "color": 1,
+      "description": "擢用、探索时可以获得优待"
+    },
+    {
+      "id": 121,
+      "name": "论客",
+      "pinyin": "Lunke",
+      "color": 1,
+      "description": "外交可以获得优待"
+    },
+    {
+      "id": 122,
+      "name": "策士",
+      "pinyin": "Ceshi",
+      "color": 1,
+      "description": "计略可以获得优待"
+    },
+    {
+      "id": 123,
+      "name": "抚慰",
+      "pinyin": "Weifu",
+      "color": 1,
+      "description": "位于所属城市时，不会出现贼"
+    },
+    {
+      "id": 124,
+      "name": "亲乌",
+      "pinyin": "Qinwu",
+      "color": 1,
+      "description": "位于所属城市时，不会出现乌桓。可用计略【埋伏之毒】使乌桓出现"
+    },
+    {
+      "id": 125,
+      "name": "亲鲜",
+      "pinyin": "Qinxian",
+      "color": 1,
+      "description": "位于所属城市时，不会出现鲜卑。可用计略【埋伏之毒】使鲜卑出现"
+    },
+    {
+      "id": 126,
+      "name": "亲羌",
+      "pinyin": "Qinqiang",
+      "color": 1,
+      "description": "位于所属城市时，不会出现羌。可用计略【埋伏之毒】使羌出现"
+    },
+    {
+      "id": 127,
+      "name": "亲越",
+      "pinyin": "Qinyue",
+      "color": 1,
+      "description": "位于所属城市时，不会出现山越。可用计略【埋伏之毒】使山越出现"
+    },
+    {
+      "id": 128,
+      "name": "亲南",
+      "pinyin": "Qinman",
+      "color": 1,
+      "description": "位于所属城市时，不会出现南中。可用计略【埋伏之毒】使南中出现"
+    },
+    {
+      "id": 129,
+      "name": "占术",
+      "pinyin": "Zhanshu",
+      "color": 1,
+      "description": "位于所属城市时，不会发生灾害，容易丰收"
+    },
+    {
+      "id": 130,
+      "name": "坚牢",
+      "pinyin": "Jianlao",
+      "color": 1,
+      "description": "位于所属城市时，城市遭到攻击时的反击伤害上升"
+    },
+    {
+      "id": 131,
+      "name": "秘计",
+      "pinyin": "Miji",
+      "color": 0,
+      "description": "位于城市时，城市遭到攻击时敌方部队的全能力下降"
+    },
+    {
+      "id": 132,
+      "name": "修理",
+      "pinyin": "Zhengxiu",
+      "color": 1,
+      "description": "位于所属据点时，耐久的恢复量增加"
+    },
+    {
+      "id": 133,
+      "name": "医术",
+      "pinyin": "Yishu",
+      "color": 1,
+      "description": "位于所属城市时，伤兵、伤病武将的恢复量增加"
+    },
+    {
+      "id": 134,
+      "name": "筹措",
+      "pinyin": "Choucuo",
+      "color": 1,
+      "description": "身为太守所在的据点内，士兵的兵粮消耗减少"
+    },
+    {
+      "id": 135,
+      "name": "富豪",
+      "pinyin": "Fuhao",
+      "color": 1,
+      "description": "位于所属城市时，收入时可以获得固定额度以外的资金"
+    },
+    {
+      "id": 136,
+      "name": "米道",
+      "pinyin": "Midao",
+      "color": 1,
+      "description": "位于所属城市时，收入时可以获得固定额度以外的兵粮"
+    },
+    {
+      "id": 137,
+      "name": "代理",
+      "pinyin": "Daiban",
+      "color": 0,
+      "description": "位于城市时，该城市的武将俸禄减少"
+    },
+    {
+      "id": 138,
+      "name": "王佐",
+      "pinyin": "Wangzuo",
+      "color": 1,
+      "description": "位于所属城市时，所属于城市的全部区域的开发上升量增加。兼任区域时能力不会下降"
+    },
+    {
+      "id": 139,
+      "name": "柱石",
+      "pinyin": "Zhushi",
+      "color": 1,
+      "description": "位于所属城市时，所属于该城市的全部区域易于提高治安"
+    },
+    {
+      "id": 140,
+      "name": "寡欲",
+      "pinyin": "Guayu",
+      "color": 1,
+      "description": "自己的俸禄减少"
+    },
+    {
+      "id": 141,
+      "name": "贪婪",
+      "pinyin": "Tanlan",
+      "color": 2,
+      "description": "自己的俸禄增加"
+    },
+    {
+      "id": 142,
+      "name": "强健",
+      "pinyin": "Wanjian",
+      "color": 1,
+      "description": "不易伤病"
+    },
+    {
+      "id": 143,
+      "name": "虚弱",
+      "pinyin": "Xuruo",
+      "color": 2,
+      "description": "容易伤病"
+    },
+    {
+      "id": 144,
+      "name": "矍铄",
+      "pinyin": "Jueshuo",
+      "color": 3,
+      "description": "自己到达一定年龄后，自部队的全能力上升，单挑获得优待"
+    },
+    {
+      "id": 145,
+      "name": "潜在",
+      "pinyin": "Qianzai",
+      "color": 1,
+      "description": "获得的经验值上升"
+    },
+    {
+      "id": 146,
+      "name": "史官",
+      "pinyin": "Shiguan",
+      "color": 1,
+      "description": "主张经验的获得量增加"
+    },
+    {
+      "id": 147,
+      "name": "学者",
+      "pinyin": "Xuezhe",
+      "color": 1,
+      "description": "自己与君主的主张相同时，每回合均可获得主张经验"
+    },
+    {
+      "id": 148,
+      "name": "动员",
+      "pinyin": "Dongyuan",
+      "color": 1,
+      "description": "包括官职，指挥士兵增加1000"
+    },
+    {
+      "id": 149,
+      "name": "智嚢",
+      "pinyin": "Zhinang",
+      "color": 1,
+      "description": "使自己的提案更容易出现"
+    },
+    {
+      "id": 150,
+      "name": "神将",
+      "pinyin": "Shenjiang",
+      "color": 3,
+      "description": "除自部队之外，特定范围内的自势力部队的攻军、防御上升"
+    },
+    {
+      "id": 151,
+      "name": "卧龙",
+      "pinyin": "Fulong",
+      "color": 3,
+      "description": "状态异常战法必定成功，期间延长，自部队的状态异常无效，解除效果范围内的陷阱"
+    },
+    {
+      "id": 152,
+      "name": "凤雏",
+      "pinyin": "Fengchu",
+      "color": 3,
+      "description": "特定范围内的敌方部队的异常状态战法的成功率下降"
+    },
+    {
+      "id": 153,
+      "name": "神机",
+      "pinyin": "Shenji",
+      "color": 3,
+      "description": "特定范围内的敌方部队的攻军、防御下降"
+    },
+    {
+      "id": 154,
+      "name": "操舵",
+      "pinyin": "Caoduo",
+      "color": 1,
+      "description": "使用舰船时，自部队的移动不会因敌方的影响而降低"
+    },
+    {
+      "id": 155,
+      "name": "炼金",
+      "pinyin": "Lianjin",
+      "color": 3,
+      "description": "自部队的陷阱与设施的建设速度上升，任命为区域官员时，开发容易上升"
+    },
+    {
+      "id": 156,
+      "name": "大哥",
+      "pinyin": "Dage",
+      "color": 3,
+      "description": "自部队的士气不易下降，防御上升"
+    },
+    {
+      "id": 157,
+      "name": "书痴",
+      "pinyin": "Shuchi",
+      "color": 3,
+      "description": "状态异常战法必定成功，期间延长。自部队的状态异常无效，解除效果范围内的陷阱"
+    },
+    {
+      "id": 158,
+      "name": "淑女",
+      "pinyin": "Shunu",
+      "color": 3,
+      "description": "下一回合开始时，恢复除自身之外的特定范围内自势力部队的伤兵，缩短异常状态的时间"
+    },
+    {
+      "id": 159,
+      "name": "审时",
+      "pinyin": "Shenshi",
+      "color": 3,
+      "description": "特定范围内的敌部队较多时，自部队的全能力上升，士气不易下降"
+    },
+    {
+      "id": 160,
+      "name": "精灵",
+      "pinyin": "Jingling",
+      "color": 3,
+      "description": "自部队的机动上升，无视敌方的影响（舰船、兵器除外）"
+    },
+    {
+      "id": 161,
+      "name": "常胜",
+      "pinyin": "Changsheng",
+      "color": 3,
+      "description": "自部队的全能力上升（舰船、兵器除外）"
+    },
+    {
+      "id": 162,
+      "name": "半身",
+      "pinyin": "Banshen",
+      "color": 3,
+      "description": "除自部队之外，特定范围内的自势力部队陷入异常状态时，缩短时间"
+    },
+    {
+      "id": 163,
+      "name": "不败",
+      "pinyin": "Bubai",
+      "color": 3,
+      "description": "状态异常战法必定成功，期间延长，自部队的状态异常无效，解除效果范围内的陷阱"
+    },
+    {
+      "id": 164,
+      "name": "俊英",
+      "pinyin": "Junying",
+      "color": 3,
+      "description": "除自部队之外，特定范围内的自势力部队的攻军、防御上升"
+    },
+    {
+      "id": 165,
+      "name": "冷彻",
+      "pinyin": "Lengche",
+      "color": 3,
+      "description": "使用计略时可以获得大幅优待"
+    },
+    {
+      "id": 166,
+      "name": "疾风",
+      "pinyin": "Jifeng",
+      "color": 3,
+      "description": "自部队的机动大幅上升"
+    },
+    {
+      "id": 167,
+      "name": "智勇",
+      "pinyin": "Zhiyong",
+      "color": 3,
+      "description": "特定范围内敌部队的机动、防御下降"
+    },
+    {
+      "id": 168,
+      "name": "先见",
+      "pinyin": "Xianjian",
+      "color": 3,
+      "description": "下一回合开始时，除自部队之外，特定范围内的自势力部队(男)士气大幅上升"
+    },
+    {
+      "id": 169,
+      "name": "前辈",
+      "pinyin": "Qianbei",
+      "color": 3,
+      "description": "在下回合开始时，恢复除自部队外特定范围内自势力部队的伤兵和士气。"
+    },
+    {
+      "id": 170,
+      "name": "无畏",
+      "pinyin": "Wuwei",
+      "color": 3,
+      "description": "当击破特定范围内的敌部队后，除自部队外范围内自势力部队的士气大幅上升。"
+    },
+    {
+      "id": 171,
+      "name": "专心",
+      "pinyin": "Zhuanxin",
+      "color": 3,
+      "description": "除自部队外特定范围内的自势力部队（男）陷入状态异常的期间缩短。"
+    },
+    {
+      "id": 172,
+      "name": "后辈",
+      "pinyin": "Houbei",
+      "color": 3,
+      "description": "兵站断绝时，自部队的全能力上升。"
+    },
+    {
+      "id": 173,
+      "name": "黑骑",
+      "pinyin": "Heiqi",
+      "color": 3,
+      "description": "自部队的攻军大幅上升（舰船、兵器除外）"
+    },
+    {
+      "id": 174,
+      "name": "勇者",
+      "pinyin": "Yongzhe",
+      "color": 3,
+      "description": "使敌武将更容易负伤、战死"
+    },
+    {
+      "id": 175,
+      "name": "慈爱",
+      "pinyin": "Ciai",
+      "color": 3,
+      "description": "位于所属城市时，伤兵、伤病武将的恢复量大幅增加"
+    },
+    {
+      "id": 176,
+      "name": "名门",
+      "pinyin": "Mingmen",
+      "color": 3,
+      "description": "在官职的基础上，指挥士兵增加2000"
+    },
+    {
+      "id": 177,
+      "name": "老将",
+      "pinyin": "Laojiang",
+      "color": 3,
+      "description": "自部队的全能力上升，士气不容易下降"
+    },
+    {
+      "id": 178,
+      "name": "空战",
+      "pinyin": "Kongzhan",
+      "color": 3,
+      "description": "提升自部队的攻城、破城（舰船、兵器除外）"
+    },
+    {
+      "id": 179,
+      "name": "诡辩",
+      "pinyin": "Guibian",
+      "color": 3,
+      "description": "任命为区域官员后将大幅扩大土地占领，成为俘虏时的赎金将大幅增加"
+    },
+    {
+      "id": 180,
+      "name": "自尊",
+      "pinyin": "Zizun",
+      "color": 3,
+      "description": "使自己的提案更容易出现"
+    },
+    {
+      "id": 181,
+      "name": "众望",
+      "pinyin": "Zhongwang",
+      "color": 1,
+      "description": "担任区域官员时，可防止其他势力的区域怀柔"
+    },
+    {
+      "id": 182,
+      "name": "仁政",
+      "pinyin": "Renzheng",
+      "color": 1,
+      "description": "担任太守时，可以防止所在据点的所属武将的忠诚度自然减少"
+    },
+    {
+      "id": 183,
+      "name": "灭火",
+      "pinyin": "Miehuo",
+      "color": 1,
+      "description": "扑灭自部队移动目标土地上的火"
+    },
+    {
+      "id": 184,
+      "name": "粉碎",
+      "pinyin": "Fensui",
+      "color": 1,
+      "description": "攻击障碍物时，大幅减少耐久"
+    },
+    {
+      "id": 185,
+      "name": "特使",
+      "pinyin": "Teshi",
+      "color": 1,
+      "description": "交易时友好度易于上升"
+    },
+    {
+      "id": 186,
+      "name": "向导",
+      "pinyin": "Xiangdao",
+      "color": 1,
+      "description": "交易所需天数缩短"
+    },
+    {
+      "id": 187,
+      "name": "看破",
+      "pinyin": "Kanpo",
+      "color": 1,
+      "description": "自部队不会陷入【伪报】"
+    },
+    {
+      "id": 188,
+      "name": "轻率",
+      "pinyin": "Qingshuai",
+      "color": 2,
+      "description": "自部队处于【伪报】状态时，机动上升"
+    },
+    {
+      "id": 189,
+      "name": "察觉",
+      "pinyin": "Chajue",
+      "color": 1,
+      "description": "除自部队之外，解除特定范围内的自势力部队的【伪报】状态"
+    },
+    {
+      "id": 190,
+      "name": "教唆",
+      "pinyin": "Jiaosuo",
+      "color": 1,
+      "description": "自部队对敌部队发动【伪报】的成功率上升"
+    },
+    {
+      "id": 191,
+      "name": "掠夺",
+      "pinyin": "Lueduo",
+      "color": 1,
+      "description": "击败敌部队时，获得资金和兵粮"
+    },
+    {
+      "id": 192,
+      "name": "辅佐",
+      "pinyin": "Fuzuo",
+      "color": 1,
+      "description": "与人际关系无关，自部队易于加入合作（厌恶武将以外）"
+    },
+    {
+      "id": 193,
+      "name": "慈悲",
+      "pinyin": "Cibei",
+      "color": 1,
+      "description": "无论敌我，士兵容易生还（伤兵增加）"
+    },
+    {
+      "id": 194,
+      "name": "粗暴",
+      "pinyin": "Cubao",
+      "color": 2,
+      "description": "无论敌我，士兵不易生还（伤兵减少）"
+    },
+    {
+      "id": 195,
+      "name": "金刚",
+      "pinyin": "Jingang",
+      "color": 1,
+      "description": "大幅减少来自建筑的攻击伤害"
+    },
+    {
+      "id": 196,
+      "name": "监守",
+      "pinyin": "Jianshou",
+      "color": 1,
+      "description": "担任太守时，所在据点的所属俘虏不会逃亡"
+    },
+    {
+      "id": 197,
+      "name": "追兵",
+      "pinyin": "Zhuibing",
+      "color": 3,
+      "description": "非常容易捕获敌武将"
+    },
+    {
+      "id": 198,
+      "name": "逃兵",
+      "pinyin": "Taobing",
+      "color": 3,
+      "description": "自部队的机动上升，不会被俘"
+    },
+    {
+      "id": 199,
+      "name": "献身",
+      "pinyin": "Xianshen",
+      "color": 3,
+      "description": "除自部队外，特定范围内的自势力部队的防御大幅上升（舰船、兵器除外）"
+    },
+    {
+      "id": 200,
+      "name": "如今",
+      "pinyin": "Rujin",
+      "color": 3,
+      "description": "擢用探索大幅优待"
+    },
+    {
+      "id": 202,
+      "name": "佳丽",
+      "pinyin": "Jiali",
+      "color": 3,
+      "description": "下一回合开始时，恢复除自身之外的特定范围内自势力部队的伤兵，大幅缩短异常状态的时间"
+    },
+    {
+      "id": 203,
+      "name": "求道",
+      "pinyin": "Qiudao",
+      "color": 3,
+      "description": "自部队的士气不易下降，防御大幅上升"
+    },
+    {
+      "id": 204,
+      "name": "学士",
+      "pinyin": "Xueshi",
+      "color": 3,
+      "description": "状态异常战法必定成功且时间大幅延长，自部队的状态异常无效，解除效果范围以内的陷阱"
+    },
+    {
+      "id": 205,
+      "name": "高贵",
+      "pinyin": "Gaogui",
+      "color": 3,
+      "description": "除自部队之外，特定范围内的自势力部队的攻军大幅上升（舰船、兵器除外）"
+    },
+    {
+      "id": 206,
+      "name": "探求",
+      "pinyin": "Tanqiu",
+      "color": 3,
+      "description": "擢用、探索所需天数大幅缩短"
+    },
+    {
+      "id": 207,
+      "name": "绿手",
+      "pinyin": "Lvshou",
+      "color": 3,
+      "description": "位于森林、密林中的自部队的全能力大幅上升"
+    },
+    {
+      "id": 208,
+      "name": "徒食",
+      "pinyin": "Tushi",
+      "color": 3,
+      "description": "位于所属城市时，收入时可以获得固定额度以外的资金和兵粮"
+    },
+    {
+      "id": 209,
+      "name": "救济",
+      "pinyin": "Jiuji",
+      "color": 3,
+      "description": "位于所属城市时，伤兵、伤病武将的恢复量大幅增加"
+    },
+    {
+      "id": 210,
+      "name": "堕落",
+      "pinyin": "Duoluo",
+      "color": 3,
+      "description": "特定范围内敌部队的士气容易下降、下一回合开始时敌部队的士气下降"
+    },
+    {
+      "id": 211,
+      "name": "间谍",
+      "pinyin": "Jiandie",
+      "color": 1,
+      "description": "任命为谍报官员时，花费的费用减少"
+    },
+    {
+      "id": 212,
+      "name": "机敏",
+      "pinyin": "Jimin",
+      "color": 1,
+      "description": "侦察的成功率上升"
+    },
+    {
+      "id": 213,
+      "name": "腾达",
+      "pinyin": "Tengda",
+      "color": 1,
+      "description": "功劳的获得量增加"
+    },
+    {
+      "id": 214,
+      "name": "顽固",
+      "pinyin": "Wangu",
+      "color": 2,
+      "description": "功劳的获得量减少"
+    },
+    {
+      "id": 215,
+      "name": "雅望",
+      "pinyin": "Yawang",
+      "color": 1,
+      "description": "担任区域官员时，名胜的收入增加效果上升"
+    },
+    {
+      "id": 216,
+      "name": "复苏",
+      "pinyin": "Fusu",
+      "color": 1,
+      "description": "位于府上时，下一回合开始时自部队的士气上升"
+    },
+    {
+      "id": 217,
+      "name": "夺取",
+      "pinyin": "Duoqu",
+      "color": 1,
+      "description": "击破敌方军事施设时，获得资金"
+    },
+    {
+      "id": 218,
+      "name": "安泰",
+      "pinyin": "Antai",
+      "color": 1,
+      "description": "担任区域官员时，可防止进攻造成的区域开发减少"
+    },
+    {
+      "id": 219,
+      "name": "明敏",
+      "pinyin": "Mingmin",
+      "color": 1,
+      "description": "兼任多地区域官员时，能力不会下降"
+    }
+  ],
+  "tactics": [
+    {
+      "id": 1,
+      "name": "奋战",
+      "pinyin": "Fenzhan",
+      "category": 1,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 2,
+      "name": "突击",
+      "pinyin": "Tuji",
+      "category": 1,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 3,
+      "name": "奇袭",
+      "pinyin": "Qixi",
+      "category": 1,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 4,
+      "name": "齐射",
+      "pinyin": "Qishe",
+      "category": 2,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 5,
+      "name": "火矢",
+      "pinyin": "Huoshi",
+      "category": 2,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 6,
+      "name": "连弩",
+      "pinyin": "Liannu",
+      "category": 2,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 7,
+      "name": "激励",
+      "pinyin": "Jili",
+      "category": 3,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 8,
+      "name": "铁壁",
+      "pinyin": "Tiebi",
+      "category": 3,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 9,
+      "name": "呐喊",
+      "pinyin": "Nahan",
+      "category": 3,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 10,
+      "name": "牵制",
+      "pinyin": "Qianzhi",
+      "category": 4,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 11,
+      "name": "大喝",
+      "pinyin": "Dahe",
+      "category": 4,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 12,
+      "name": "扰乱",
+      "pinyin": "Raoluan",
+      "category": 4,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 13,
+      "name": "业火",
+      "pinyin": "Yehuo",
+      "category": 5,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 14,
+      "name": "止步",
+      "pinyin": "Zhibu",
+      "category": 5,
+      "gauge": 72,
+      "tier": "通用"
+    },
+    {
+      "id": 15,
+      "name": "混乱",
+      "pinyin": "Hunluan",
+      "category": 5,
+      "gauge": 72,
+      "tier": "通用"
+    },
+    {
+      "id": 16,
+      "name": "挑衅",
+      "pinyin": "Tiaoxin",
+      "category": 5,
+      "gauge": 72,
+      "tier": "通用"
+    },
+    {
+      "id": 17,
+      "name": "谩骂",
+      "pinyin": "Manma",
+      "category": 5,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 18,
+      "name": "鼓舞",
+      "pinyin": "Guwu",
+      "category": 6,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 19,
+      "name": "治疗",
+      "pinyin": "Zhiliao",
+      "category": 6,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 20,
+      "name": "镇静",
+      "pinyin": "Zhenjing",
+      "category": 6,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 21,
+      "name": "井阑",
+      "pinyin": "Jinglan",
+      "category": 7,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 22,
+      "name": "冲车",
+      "pinyin": "Chongche",
+      "category": 7,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 23,
+      "name": "投石",
+      "pinyin": "Toushi",
+      "category": 7,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 24,
+      "name": "驱逐",
+      "pinyin": "Quzhu",
+      "category": 8,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 25,
+      "name": "猛攻",
+      "pinyin": "Qiangxi",
+      "category": 8,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 26,
+      "name": "箭雨",
+      "pinyin": "Jianyu",
+      "category": 8,
+      "gauge": 48,
+      "tier": "通用"
+    },
+    {
+      "id": 31,
+      "name": "豪气冲天",
+      "pinyin": "Haoqichongtian",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 32,
+      "name": "妙才连箭",
+      "pinyin": "Miaocailianjian",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 33,
+      "name": "八门金锁",
+      "pinyin": "Bamenjinsuo",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 34,
+      "name": "力大无穷",
+      "pinyin": "Lidawuqiong",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 35,
+      "name": "仁王挺立",
+      "pinyin": "Renwangtingli",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 36,
+      "name": "辽来辽来",
+      "pinyin": "Liaolailiaolai",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 37,
+      "name": "身经百战",
+      "pinyin": "Shenjingbaizhan",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 38,
+      "name": "长驱直入",
+      "pinyin": "Changquzhiru",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 39,
+      "name": "王佐之才",
+      "pinyin": "Wangzuozhicai",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 40,
+      "name": "兵贵神速",
+      "pinyin": "Bingguishensu",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 41,
+      "name": "虚诱掩杀",
+      "pinyin": "Xuyouyansha",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 42,
+      "name": "白马铁骑",
+      "pinyin": "Baimatieji",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 43,
+      "name": "千方百计",
+      "pinyin": "Qianfangbaiji",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 44,
+      "name": "黄须刚勇",
+      "pinyin": "Huangxugangyong",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 45,
+      "name": "猛虎爪牙",
+      "pinyin": "Menghuzhuaya",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 46,
+      "name": "虎啸风烈",
+      "pinyin": "Huxiaofenglie",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 47,
+      "name": "明察秋毫",
+      "pinyin": "Mingchaqiuhao",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 48,
+      "name": "文武双全",
+      "pinyin": "Wenwushuangquan",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 49,
+      "name": "极焰",
+      "pinyin": "Jiyan",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 50,
+      "name": "苦肉之计",
+      "pinyin": "Lurouzhiji",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 51,
+      "name": "瞒天过海",
+      "pinyin": "Mantianguohai",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 52,
+      "name": "锦帆猛攻",
+      "pinyin": "Jinfanmenggong",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 53,
+      "name": "驰突",
+      "pinyin": "Chitu",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 54,
+      "name": "聪明刚毅",
+      "pinyin": "Congminggangyi",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 55,
+      "name": "虎弓",
+      "pinyin": "Hugong",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 56,
+      "name": "机智奇策",
+      "pinyin": "Jizhiqice",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 57,
+      "name": "三百死士",
+      "pinyin": "Sanbaisishi",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 58,
+      "name": "疑城之计",
+      "pinyin": "Yichengzhiji",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 59,
+      "name": "神威贯穿",
+      "pinyin": "Shenweiguanchuan",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 60,
+      "name": "神弓",
+      "pinyin": "Shengong",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 61,
+      "name": "明镜止水",
+      "pinyin": "Mingjingzhishui",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 62,
+      "name": "连环之计",
+      "pinyin": "Lianhuanzhiji",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 63,
+      "name": "足智多谋",
+      "pinyin": "Zuzhiduomou",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 64,
+      "name": "气焰万丈",
+      "pinyin": "Qiyanwanzhang",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 65,
+      "name": "反骨刃",
+      "pinyin": "Fanguren",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 66,
+      "name": "忠勇义烈",
+      "pinyin": "Zhongyongyilie",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 67,
+      "name": "铁骑突",
+      "pinyin": "Tieqitu",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 68,
+      "name": "龙骧奋战",
+      "pinyin": "Longxiangfenzhan",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 69,
+      "name": "虎翼奋战",
+      "pinyin": "Huyifenzhan",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 70,
+      "name": "倒山倾海",
+      "pinyin": "Daoshanqinghai",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 71,
+      "name": "酖毒",
+      "pinyin": "Dandu",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 72,
+      "name": "不费吹灰",
+      "pinyin": "Bufeichuihui",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 73,
+      "name": "掎角之计",
+      "pinyin": "Jijiaozhiji",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 74,
+      "name": "陷阵营",
+      "pinyin": "Xianzhenying",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 75,
+      "name": "袁门威望",
+      "pinyin": "Yuanmenweiwang",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 76,
+      "name": "疾风怒涛",
+      "pinyin": "Jifengnutao",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 77,
+      "name": "疾风迅雷",
+      "pinyin": "Jifengxunlei",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 78,
+      "name": "袁门荣光",
+      "pinyin": "Yuanmenrongguang",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 79,
+      "name": "白马义从",
+      "pinyin": "Baimayicong",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 80,
+      "name": "天边必杀",
+      "pinyin": "Tianbianbisha",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 81,
+      "name": "蛮王咆哮",
+      "pinyin": "Manwangpaoxiao",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 82,
+      "name": "火神乱刃",
+      "pinyin": "Huoshenluanren",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 83,
+      "name": "神机妙算",
+      "pinyin": "Shenjimiaosuan",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 84,
+      "name": "强壮进军",
+      "pinyin": "Qiangzhuangjinjun",
+      "category": 4,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 85,
+      "name": "精练策数",
+      "pinyin": "Jinglianceshu",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 86,
+      "name": "勇往直前",
+      "pinyin": "Yongwangzhiqian",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 87,
+      "name": "不屈不挠",
+      "pinyin": "Buqubunao",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 88,
+      "name": "沉毅大略",
+      "pinyin": "Chenyidalue",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 89,
+      "name": "深谋远虑",
+      "pinyin": "Shenmouyuanlv",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 90,
+      "name": "太平要术",
+      "pinyin": "Taipingyaoshu",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 91,
+      "name": "军神",
+      "pinyin": "Junshen",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 92,
+      "name": "万人敌",
+      "pinyin": "Wanrendi",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 93,
+      "name": "天下无双",
+      "pinyin": "Tianxiawushuang",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 94,
+      "name": "魏武之强",
+      "pinyin": "Weiwuzhiqiang",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 95,
+      "name": "大器大德",
+      "pinyin": "Daqidade",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 96,
+      "name": "单骑行",
+      "pinyin": "Danqiqu",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 97,
+      "name": "神算鬼谋",
+      "pinyin": "Shensuanguimou",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 98,
+      "name": "大虎雄略",
+      "pinyin": "Dahuxionglue",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 99,
+      "name": "神火计",
+      "pinyin": "Shenhuoji",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 100,
+      "name": "倾国之舞",
+      "pinyin": "Qingguozhiwu",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 101,
+      "name": "天国星体",
+      "pinyin": "Tianguoxingti",
+      "category": 1,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 102,
+      "name": "至高一闪",
+      "pinyin": "Zhigaoyishan",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 103,
+      "name": "审判之锤",
+      "pinyin": "Shenpanzhichui",
+      "category": 1,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 104,
+      "name": "最终乐章",
+      "pinyin": "Zuizhongyuezhang",
+      "category": 1,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 105,
+      "name": "倒转逆行",
+      "pinyin": "Daozhuannixing",
+      "category": 1,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 106,
+      "name": "一骑当千",
+      "pinyin": "Yiqidangqian",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 107,
+      "name": "黄金狮子",
+      "pinyin": "Huangjinshizi",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 108,
+      "name": "黄金狮子",
+      "pinyin": "Huangjinshizi",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 109,
+      "name": "挺身守护",
+      "pinyin": "Tingshenshouhu",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 110,
+      "name": "挺身守护",
+      "pinyin": "Tingshenshouhu",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 111,
+      "name": "魔术师",
+      "pinyin": "Moshushi",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 112,
+      "name": "魔术师",
+      "pinyin": "Moshushi",
+      "category": 5,
+      "gauge": 90,
+      "tier": "固有"
+    },
+    {
+      "id": 113,
+      "name": "杨语录",
+      "pinyin": "Yangyulu",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 114,
+      "name": "杨语录",
+      "pinyin": "Yangyulu",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 115,
+      "name": "义眼威慑",
+      "pinyin": "Yiyanweishe",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 116,
+      "name": "人狼咆哮",
+      "pinyin": "Renlangpaoxiao",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 117,
+      "name": "金银妖瞳",
+      "pinyin": "Jinyinyaotong",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 118,
+      "name": "淑女素养",
+      "pinyin": "Shunvsuyang",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 119,
+      "name": "后方支援",
+      "pinyin": "Houfangzhiyuan",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 120,
+      "name": "蔷薇骑士",
+      "pinyin": "Qiangweiqishi",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 121,
+      "name": "逻辑演算",
+      "pinyin": "Luojiyansuan",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 122,
+      "name": "佯动作战",
+      "pinyin": "Yangdongzuozhan",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 123,
+      "name": "王虎呐喊",
+      "pinyin": "Wanghunahan",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 124,
+      "name": "肉馅制造",
+      "pinyin": "Rouxianzhizao",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 125,
+      "name": "从容中道",
+      "pinyin": "Congrongzhongdao",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 126,
+      "name": "贵族荣光",
+      "pinyin": "Guizurongguang",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 127,
+      "name": "老练",
+      "pinyin": "Laolian",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 128,
+      "name": "击落王",
+      "pinyin": "Jiluowang",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 129,
+      "name": "同盟万岁",
+      "pinyin": "Tongmengwansui",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 130,
+      "name": "随机应变",
+      "pinyin": "Suijiyingbian",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 131,
+      "name": "突骑",
+      "pinyin": "Tuqi",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 132,
+      "name": "弓骑",
+      "pinyin": "Gongqi",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 133,
+      "name": "战车",
+      "pinyin": "Zhanche",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 134,
+      "name": "刚气",
+      "pinyin": "Gangqi",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 135,
+      "name": "象兵",
+      "pinyin": "Xiangbing",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 136,
+      "name": "战象突击",
+      "pinyin": "Zhanxiangtuji",
+      "category": 7,
+      "gauge": 48,
+      "tier": "固有"
+    },
+    {
+      "id": 137,
+      "name": "阿修罗阵",
+      "pinyin": "Axiuluozhen",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 138,
+      "name": "安息射法",
+      "pinyin": "Anxishefa",
+      "category": 2,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 139,
+      "name": "龟甲队列",
+      "pinyin": "Guijiaduilie",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 140,
+      "name": "确乎不拔",
+      "pinyin": "Quehububa",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 141,
+      "name": "奇计九条",
+      "pinyin": "Qijijiutiao",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 142,
+      "name": "铜墙铁壁",
+      "pinyin": "Tongqiaotiebi",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 143,
+      "name": "叛转必杀",
+      "pinyin": "Panzhuanbisha",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 144,
+      "name": "皎月弓",
+      "pinyin": "Jiaoyuegong",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 145,
+      "name": "威灵三尖",
+      "pinyin": "Weilingsanjian",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 146,
+      "name": "机关利器",
+      "pinyin": "Jiguanliqi",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 147,
+      "name": "乱射乱击",
+      "pinyin": "Luansheluanji",
+      "category": 3,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 148,
+      "name": "玄鸟双簧",
+      "pinyin": "Xuanniaoshuanghuang",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 149,
+      "name": "五火之变",
+      "pinyin": "Wuhuozhibian",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 150,
+      "name": "图南之翼",
+      "pinyin": "Tunanzhiyi",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 151,
+      "name": "震天动地",
+      "pinyin": "Zhentiandongdi",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 152,
+      "name": "功狗逆击",
+      "pinyin": "Gonggouniji",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 153,
+      "name": "忠烈之鬼",
+      "pinyin": "Zhongliezhigui",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 154,
+      "name": "生杀自在",
+      "pinyin": "Shengshazizai",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 155,
+      "name": "变幻狙击",
+      "pinyin": "Bianhuanjuji",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 156,
+      "name": "中黄太乙",
+      "pinyin": "Zhonghuangtaiyi",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 157,
+      "name": "万法归一",
+      "pinyin": "Wanfaguiyi",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 158,
+      "name": "浑水摸鱼",
+      "pinyin": "Hunshuimoyu",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 159,
+      "name": "十面埋伏",
+      "pinyin": "Shimianmaifu",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 160,
+      "name": "规略明练",
+      "pinyin": "Guilueminglian",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 161,
+      "name": "破竹之势",
+      "pinyin": "Pozhuzhishi",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 162,
+      "name": "才气焕发",
+      "pinyin": "Caiqihuanfa",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 163,
+      "name": "万马奔腾",
+      "pinyin": "Wanmabenteng",
+      "category": 1,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 164,
+      "name": "纬武经文",
+      "pinyin": "Weiwujingwen",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 165,
+      "name": "天地通察",
+      "pinyin": "Tianditongcha",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 166,
+      "name": "不战屈敌",
+      "pinyin": "Buzhanqudi",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 167,
+      "name": "天衣无缝",
+      "pinyin": "Tianyiwufeng",
+      "category": 6,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 168,
+      "name": "八俊之誉",
+      "pinyin": "Bajunzhiyu",
+      "category": 4,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 169,
+      "name": "以逸待劳",
+      "pinyin": "Yiyidailao",
+      "category": 5,
+      "gauge": 72,
+      "tier": "固有"
+    },
+    {
+      "id": 170,
+      "name": "霸神圆舞",
+      "pinyin": "Bashenyuanw",
+      "category": 1,
+      "gauge": 72,
+      "tier": "DLC"
+    },
+    {
+      "id": 171,
+      "name": "樱花天舞",
+      "pinyin": "Yinghuatianwu",
+      "category": 1,
+      "gauge": 72,
+      "tier": "DLC"
+    },
+    {
+      "id": 172,
+      "name": "蔷薇轮舞",
+      "pinyin": "Qiangweilunwu",
+      "category": 1,
+      "gauge": 72,
+      "tier": "DLC"
+    },
+    {
+      "id": 173,
+      "name": "女神助威",
+      "pinyin": "ZhaNvshenzhuwei",
+      "category": 6,
+      "gauge": 72,
+      "tier": "DLC"
+    },
+    {
+      "id": 175,
+      "name": "天之光芒",
+      "pinyin": "Tianzhiguangmang",
+      "category": 1,
+      "gauge": 90,
+      "tier": "DLC"
+    },
+    {
+      "id": 176,
+      "name": "镇魂乐章",
+      "pinyin": "Zhenhunyuezhang",
+      "category": 1,
+      "gauge": 90,
+      "tier": "DLC"
+    },
+    {
+      "id": 177,
+      "name": "奥义胧月",
+      "pinyin": "Aoyilongyue",
+      "category": 1,
+      "gauge": 90,
+      "tier": "DLC"
+    },
+    {
+      "id": 178,
+      "name": "无瑕心愿",
+      "pinyin": "Wuxiaxinyuan",
+      "category": 1,
+      "gauge": 90,
+      "tier": "DLC"
+    },
+    {
+      "id": 179,
+      "name": "技能掠夺",
+      "pinyin": "Jinenglveduo",
+      "category": 5,
+      "gauge": 90,
+      "tier": "DLC"
+    },
+    {
+      "id": 180,
+      "name": "百花永恒",
+      "pinyin": "Baihuayongheng",
+      "category": 4,
+      "gauge": 90,
+      "tier": "DLC"
+    },
+    {
+      "id": 181,
+      "name": "吸血",
+      "pinyin": "Xixie",
+      "category": 4,
+      "gauge": 90,
+      "tier": "DLC"
+    },
+    {
+      "id": 182,
+      "name": "神佑天助",
+      "pinyin": "Shenyoutianzhu",
+      "category": 6,
+      "gauge": 72,
+      "tier": "DLC"
+    },
+    {
+      "id": 183,
+      "name": "魔之巧言",
+      "pinyin": "Mozhiqiaoyan",
+      "category": 5,
+      "gauge": 90,
+      "tier": "DLC"
+    }
+  ]
+}

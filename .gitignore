@@ -1,0 +1,25 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environments & local build tools
+.venv/
+venv/
+.build-tools/
+
+# PyInstaller build outputs
+build/
+dist/
+*.exe
+
+# Local IDE / tool config
+.codex/
+.vscode/
+.idea/
+
+# OS / temporary files
+.DS_Store
+Thumbs.db
+*.log
