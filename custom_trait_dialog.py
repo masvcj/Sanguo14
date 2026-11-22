@@ -108,6 +108,7 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         self.edit_file_path: Optional[Path] = discover_edit_personality_file()
         self.edit_file_traits: Dict[int, CustomTraitDef] = {}
         self.live_traits: Dict[int, CustomTraitDef] = {}
+        self.draft_new_slots: Dict[int, CustomTraitDef] = {}
         self.effect1_labels: List[str] = [_effect_label(e.id) for e in TRAIT_EFFECT_DEFS]
         self.effect2_labels: List[str] = [_effect_label(0)] + list(self.effect1_labels)
 
@@ -115,6 +116,8 @@ class CustomTraitWorkshopDialog(ttk.Frame):
             value=str(self.edit_file_path) if self.edit_file_path else f"未自动找到 {EDIT_PERSONALITY_FILENAME}（可点击右侧手动指定）"
         )
         self.slot_var = tk.StringVar(value=str(CUSTOM_TRAIT_MIN_ID))
+        self.slot_mode_var = tk.StringVar(value="")
+        self.save_btn_var = tk.StringVar(value="写入全局（同步全局+内存）")
         self.name_var = tk.StringVar(value="战神无双")
         self.color_var = tk.StringVar(value=_color_label(3))
         self.eff1_filter_var = tk.StringVar(value="")
@@ -133,8 +136,10 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         self.desc_var = tk.StringVar(value="全地形全兵种常驻：自部队全能力大幅上升(+30)，无视敌方控制区域")
 
         self._build_ui()
+        self.slot_var.trace_add("write", lambda *_: self._update_slot_mode_hint())
         self._reload_all_sources(silent=True)
         self._pick_initial_slot()
+        self._update_slot_mode_hint()
         self._update_hints()
 
         if self._toplevel is not None:
@@ -163,6 +168,17 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         ttk.Label(fbar, text="全局文件:", style="Card.TLabel").pack(side=tk.LEFT, padx=(0, 4))
         ttk.Label(fbar, textvariable=self.edit_file_var, style="CardMuted.TLabel").pack(side=tk.LEFT, fill=tk.X, expand=True)
         ttk.Button(fbar, text="更换路径...", style="Mini.TButton", command=self._choose_edit_file).pack(side=tk.RIGHT)
+
+        # Single-slot self + friendly aura runtime patch toggle (256..355 only)
+        if hasattr(self.app, "custom_aura_self_var"):
+            pbar = ttk.Frame(self, style="Card.TFrame", padding=(12, 4))
+            pbar.pack(fill=tk.X, padx=16, pady=(0, 4))
+            ttk.Checkbutton(
+                pbar,
+                text="自创友军光环单槽双吃（仅 256~355 生效：条件选「9 - 友军光环」，1个槽同时给自身+周围友军加能力，不影响原版神将/奸雄）",
+                variable=self.app.custom_aura_self_var,
+                command=lambda: self.app._toggle_custom_aura_self_patch(parent=self._toplevel or self.app),
+            ).pack(side=tk.LEFT)
 
         split = ttk.Frame(self, padding=(16, 2, 16, 8))
         split.pack(fill=tk.BOTH, expand=True)
@@ -194,9 +210,10 @@ class CustomTraitWorkshopDialog(ttk.Frame):
 
         lbtns1 = ttk.Frame(left, style="Card.TFrame")
         lbtns1.pack(side=tk.BOTTOM, fill=tk.X, pady=(6, 4))
-        ttk.Button(lbtns1, text="新建空槽位", command=self._new_free_slot).pack(side=tk.LEFT, padx=(0, 6))
-        ttk.Button(lbtns1, text="刷新读取", command=lambda: self._reload_all_sources(silent=False)).pack(side=tk.LEFT, padx=(0, 6))
-        ttk.Button(lbtns1, text="删除/清空", command=self._delete_selected).pack(side=tk.RIGHT)
+        ttk.Button(lbtns1, text="新建空槽位", command=self._new_free_slot).pack(side=tk.LEFT, padx=(0, 4))
+        ttk.Button(lbtns1, text="刷新读取", command=lambda: self._reload_all_sources(silent=False)).pack(side=tk.LEFT, padx=(0, 4))
+        ttk.Button(lbtns1, text="清空", command=self._clear_all_traits).pack(side=tk.RIGHT)
+        ttk.Button(lbtns1, text="删除", command=self._delete_selected).pack(side=tk.RIGHT, padx=(0, 4))
 
         tbox = ttk.Frame(left, style="Card.TFrame")
         tbox.pack(fill=tk.BOTH, expand=True)
@@ -228,7 +245,7 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         act.pack(side=tk.BOTTOM, fill=tk.X)
         ttk.Button(
             act,
-            text="写入全局（进剧本前给史实/自创武将可选）",
+            textvariable=self.save_btn_var,
             style="Accent.TButton",
             command=self._commit_to_global_file,
         ).pack(side=tk.LEFT, padx=(0, 8))
@@ -272,9 +289,10 @@ class CustomTraitWorkshopDialog(ttk.Frame):
             textvariable=self.color_var,
             values=[_color_label(k) for k, _ in COLOR_OPTIONS],
             state="readonly",
-            width=16,
+            width=14,
             style="Mini.TCombobox",
-        ).pack(side=tk.LEFT, padx=(6, 0))
+        ).pack(side=tk.LEFT, padx=(6, 8))
+        ttk.Label(brow, textvariable=self.slot_mode_var, style="Badge.TLabel").pack(side=tk.RIGHT)
 
         # Effect 1
         e1_hdr = ttk.Frame(right, style="Card.TFrame")
@@ -411,8 +429,14 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         if c1 in AURA_COND1_IDS:
             if parse_int(self.cond1_param_var.get(), 0) == 0:
                 self.cond1_param_var.set("3")
+            if _leading_int(self.cond2_var.get(), 0) == 0:
+                self.cond2_var.set(_cond_label(TRAIT_COND2_OPTIONS, 1))
         else:
             self.cond1_param_var.set("0")
+            if c1 == 0 and _leading_int(self.cond2_var.get(), 0) == 1:
+                self.cond2_var.set(_cond_label(TRAIT_COND2_OPTIONS, 0))
+            elif c1 != 0 and _leading_int(self.cond2_var.get(), 0) == 0:
+                self.cond2_var.set(_cond_label(TRAIT_COND2_OPTIONS, 1))
 
     def _fill_normal_value(self, which: int) -> None:
         var = self.eff1_var if which == 1 else self.eff2_var
@@ -491,41 +515,74 @@ class CustomTraitWorkshopDialog(ttk.Frame):
     def _refresh_tree(self, select_id: Optional[int] = None) -> None:
         self.tree.delete(*self.tree.get_children())
         merged = self._merged_traits()
+        # Clean up any drafts that are now persisted
+        for sid in list(self.draft_new_slots):
+            if sid in merged:
+                del self.draft_new_slots[sid]
+        display_map: Dict[int, CustomTraitDef] = dict(self.draft_new_slots)
+        display_map.update(merged)
         color_names = {3: "金色", 5: "自创", 1: "蓝色", 2: "红色", 0: "特殊"}
         tag_map = {3: "gold", 5: "custom", 1: "blue", 2: "red"}
-        for sid in sorted(merged):
-            t = merged[sid]
-            in_global = sid in self.edit_file_traits
-            in_live = sid in self.live_traits
-            if in_global and in_live:
-                loc = "全局+内存"
-            elif in_global:
-                loc = "全局文件"
-            elif in_live:
-                loc = "当前剧本"
+        for sid in sorted(display_map):
+            t = display_map[sid]
+            if sid in self.draft_new_slots and sid not in merged:
+                name_text = t.name.strip() or "(新建草稿)"
+                state = "未保存 [草稿]"
+                tag = ""
             else:
-                loc = "本地库"
-            if t.cond1 == 9:
-                scope = f"[{t.cond1_param or 3}格友军]"
-            elif t.cond1 == 10:
-                scope = f"[{t.cond1_param or 3}格敌军]"
-            elif t.cond1 == 0:
-                scope = "[自身]"
-            else:
-                scope = f"[条件{t.cond1}]"
-            state = f"{loc} {scope}"
-            tag = tag_map.get(t.color, "")
+                name_text = t.name
+                in_global = sid in self.edit_file_traits
+                in_live = sid in self.live_traits
+                if in_global and in_live:
+                    loc = "全局+内存"
+                elif in_global:
+                    loc = "全局文件"
+                elif in_live:
+                    loc = "当前剧本"
+                else:
+                    loc = "本地库"
+                if t.cond1 == 9:
+                    scope = f"[{t.cond1_param or 3}格友军]"
+                elif t.cond1 == 10:
+                    scope = f"[{t.cond1_param or 3}格敌军]"
+                elif t.cond1 == 0:
+                    scope = "[自身]"
+                else:
+                    scope = f"[条件{t.cond1}]"
+                state = f"{loc} {scope}"
+                tag = tag_map.get(t.color, "")
             self.tree.insert(
                 "",
                 tk.END,
                 iid=str(sid),
-                values=(sid, t.name, color_names.get(t.color, "特殊"), state),
+                values=(sid, name_text, color_names.get(t.color, "特殊"), state),
                 tags=(tag,) if tag else (),
             )
         if select_id is not None and self.tree.exists(str(select_id)):
             self.tree.selection_set(str(select_id))
+            self.tree.see(str(select_id))
+        self._update_slot_mode_hint()
+
+    def _update_slot_mode_hint(self) -> None:
+        sid = parse_int(self.slot_var.get(), -1)
+        merged = self._merged_traits()
+        if sid in merged:
+            existing_name = merged[sid].name
+            self.slot_mode_var.set(f"编辑中 · 覆盖 #{sid}「{existing_name}」")
+            self.save_btn_var.set(f"保存修改 #{sid}（覆盖并同步全局+内存）")
+        elif sid in self.draft_new_slots:
+            self.slot_mode_var.set(f"新建草稿 · #{sid}（未保存）")
+            self.save_btn_var.set(f"保存新建 #{sid}（同步全局+内存）")
+        elif CUSTOM_TRAIT_MIN_ID <= sid <= CUSTOM_TRAIT_MAX_ID:
+            self.slot_mode_var.set(f"新建槽位 · #{sid}")
+            self.save_btn_var.set(f"新建并写入 #{sid}（同步全局+内存）")
+        else:
+            self.slot_mode_var.set("槽位 ID 需在 256~355")
+            self.save_btn_var.set("写入全局（同步全局+内存）")
 
     def _reload_all_sources(self, *, silent: bool) -> None:
+        prev_sel = self.tree.selection()
+        prev_id = int(prev_sel[0]) if prev_sel else None
         self.edit_file_traits = {}
         if self.edit_file_path and self.edit_file_path.is_file():
             try:
@@ -544,34 +601,53 @@ class CustomTraitWorkshopDialog(ttk.Frame):
                     self.controller.catalog.upsert_trait(t.to_trait_info())
             except MemoryErrorWin32:
                 pass
-        self._refresh_tree()
+        self._refresh_tree(select_id=prev_id)
 
     def _pick_initial_slot(self) -> None:
-        used = set(self._merged_traits().keys())
-        for sid in range(CUSTOM_TRAIT_MIN_ID, CUSTOM_TRAIT_MAX_ID + 1):
-            if sid not in used:
-                self.slot_var.set(str(sid))
-                return
+        merged = self._merged_traits()
+        if merged:
+            first_sid = min(merged.keys())
+            self._load_into_form(merged[first_sid], keep_slot=False)
+            self._refresh_tree(select_id=first_sid)
+            return
+        self.slot_var.set(str(CUSTOM_TRAIT_MIN_ID))
 
     def _new_free_slot(self) -> None:
-        used = set(self._merged_traits().keys())
+        used = set(self._merged_traits().keys()) | set(self.draft_new_slots.keys())
         try:
             sid = find_next_free_custom_slot(self.app.mem, used)
         except Exception:
-            sid = next((i for i in range(CUSTOM_TRAIT_MIN_ID, CUSTOM_TRAIT_MAX_ID + 1) if i not in used), CUSTOM_TRAIT_MIN_ID)
-        self.slot_var.set(str(sid))
-        self.name_var.set("")
-        self.desc_var.set("")
-        self.app.status_var.set(f"已分配空闲自创槽位 #{sid}")
+            sid = next((i for i in range(CUSTOM_TRAIT_MIN_ID, CUSTOM_TRAIT_MAX_ID + 1) if i not in used), None)
+            if sid is None:
+                messagebox.showwarning("槽位已满", "100 个自创个性槽位 (256~355) 已全满，请先删除旧槽位。", parent=self._toplevel or self.app)
+                return
+        draft = CustomTraitDef(
+            slot_id=sid,
+            name="",
+            description="",
+            color=3,
+            eff1_id=19,
+            eff1_val=30,
+            eff2_id=0,
+            eff2_val=0,
+            cond1=0,
+            cond2=0,
+            cond1_param=0,
+        )
+        self.draft_new_slots[sid] = draft
+        self._load_into_form(draft, keep_slot=False)
+        self._refresh_tree(select_id=sid)
+        self.app.status_var.set(f"已新建空闲自创槽位 #{sid}（填写名称和效果后点击下方按钮保存）")
 
     def _on_tree_select(self, _event: tk.Event) -> None:
         sel = self.tree.selection()
         if not sel:
             return
         sid = int(sel[0])
-        trait = self.live_traits.get(sid) or self.controller.custom_traits.get(sid) or self.edit_file_traits.get(sid)
+        trait = self._merged_traits().get(sid) or self.draft_new_slots.get(sid)
         if trait is not None:
             self._load_into_form(trait, keep_slot=False)
+            self._update_slot_mode_hint()
 
     def _commit_to_global_file(self) -> None:
         """Write to editpersonalityexceSC.s14 (+ live CEditPersonalityData & CPersonalityData if game running!)."""
@@ -610,17 +686,21 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         except OSError:
             pass
 
-        # If SAN14CE_SC.exe is running (Title Menu OR Scenario), live-sync memory so user sees it IMMEDIATELY!
+        # If SAN14CE_SC.exe is running (Title Menu OR Scenario), live-sync memory independently!
         live_synced = False
         if self.app.mem.is_attached:
-            try:
-                for t in traits_to_write:
+            for t in traits_to_write:
+                try:
                     write_live_edit_personality(self.app.mem, t)
+                    live_synced = True
+                except Exception:
+                    pass
+                try:
                     write_live_custom_trait(self.app.mem, t)
                     self.live_traits[t.slot_id] = t
-                live_synced = True
-            except Exception:
-                pass
+                    live_synced = True
+                except Exception:
+                    pass
 
         primary = traits_to_write[0]
         self._load_into_form(primary, keep_slot=False)
@@ -671,13 +751,20 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         live_cnt = 0
         if self.app.mem.is_attached:
             for t in merged.values():
+                synced_one = False
                 try:
                     write_live_edit_personality(self.app.mem, t)
-                    write_live_custom_trait(self.app.mem, t)
-                    self.live_traits[t.slot_id] = t
-                    live_cnt += 1
+                    synced_one = True
                 except Exception:
                     pass
+                try:
+                    write_live_custom_trait(self.app.mem, t)
+                    self.live_traits[t.slot_id] = t
+                    synced_one = True
+                except Exception:
+                    pass
+                if synced_one:
+                    live_cnt += 1
         self._refresh_tree()
         self.on_changed(None, False)
         self.app.status_var.set(
@@ -742,8 +829,15 @@ class CustomTraitWorkshopDialog(ttk.Frame):
     def _delete_selected(self) -> None:
         sel = self.tree.selection()
         if not sel:
+            messagebox.showinfo("提示", "请先在左侧列表中选中要删除的自创个性槽位。", parent=self._toplevel or self.app)
             return
         sid = int(sel[0])
+        was_draft_only = sid in self.draft_new_slots and sid not in self._merged_traits()
+        self.draft_new_slots.pop(sid, None)
+        if was_draft_only:
+            self._refresh_tree()
+            self.app.status_var.set(f"已移除未保存草稿槽位 #{sid}")
+            return
         if sid in self.edit_file_traits and self.edit_file_path is not None:
             del self.edit_file_traits[sid]
             try:
@@ -767,4 +861,48 @@ class CustomTraitWorkshopDialog(ttk.Frame):
         self.controller.catalog.remove_trait(sid)
         self._refresh_tree()
         self.on_changed(None, False)
-        self.app.status_var.set(f"已从全局文件与本地库清除自创个性槽位 #{sid}")
+        self.app.status_var.set(f"已删除自创个性槽位 #{sid}")
+
+    def _clear_all_traits(self) -> None:
+        merged = self._merged_traits()
+        if not merged and not self.draft_new_slots:
+            messagebox.showinfo("列表为空", "当前没有任何自创个性可清空。", parent=self._toplevel or self.app)
+            return
+        sids = sorted(merged.keys())
+        total_cnt = len(set(sids) | set(self.draft_new_slots.keys()))
+        ok = messagebox.askyesno(
+            "确认清空全部自创个性",
+            f"确定要清空全部 {total_cnt} 个自创个性吗？\n"
+            "（将同步清空全局文件、当前游戏内存与本地库，全局文件会自动保留 .bak 备份）",
+            parent=self._toplevel or self.app,
+        )
+        if not ok:
+            return
+        self.draft_new_slots.clear()
+        if self.edit_file_traits and self.edit_file_path is not None:
+            self.edit_file_traits.clear()
+            try:
+                save_edit_personality_file(self.edit_file_path, self.edit_file_traits, create_backup=True)
+            except Exception as exc:
+                messagebox.showerror("清空全局文件失败", str(exc), parent=self._toplevel or self.app)
+                return
+        if self.app.mem.is_attached:
+            for sid in sids:
+                try:
+                    clear_live_edit_personality(self.app.mem, sid)
+                except Exception:
+                    pass
+                try:
+                    clear_live_custom_trait(self.app.mem, sid)
+                except Exception:
+                    pass
+            self.live_traits.clear()
+        if self.controller.custom_traits:
+            self.controller.custom_traits.clear()
+            save_custom_traits_file(self.controller.custom_traits_path, self.controller.custom_traits)
+        for sid in sids:
+            self.controller.catalog.remove_trait(sid)
+        self._refresh_tree()
+        self.on_changed(None, False)
+        self.app.status_var.set(f"已清空全部 {len(sids)} 个自创个性")
+        self.app._play_beep(True)

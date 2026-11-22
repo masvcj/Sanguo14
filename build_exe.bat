@@ -2,7 +2,17 @@
 chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
-set "TRAINER_PYTHON=C:\Users\User\AppData\Local\Programs\Python\Python314\python.exe"
+set "TRAINER_PYTHON=%LOCALAPPDATA%\Programs\Python\Python314\python.exe"
+if not exist "%TRAINER_PYTHON%" (
+    for /f "delims=" %%P in ('where python 2^>nul') do (
+        if not defined _FOUND_PY (
+            echo %%P | findstr /i "WindowsApps" >nul || (
+                set "TRAINER_PYTHON=%%P"
+                set "_FOUND_PY=1"
+            )
+        )
+    )
+)
 set "PYTHONPATH=%~dp0.build-tools;%PYTHONPATH%"
 set "TRAINER_EXE=%~dp0dist\SAN14PK_Heritage_Plus43_Trainer.exe"
 if not exist "%TRAINER_PYTHON%" (

@@ -48,6 +48,10 @@ from officer_probe import (
     HERITAGE_OFFICER_STRIDE, HERITAGE_STATS_OFFSET, OfficerFollowTarget, find_record_references,
     foreground_process_id, match_record_references,
 )
+from custom_trait_editor import (
+    is_custom_aura_self_patch_enabled,
+    set_custom_aura_self_patch,
+)
 from trait_tactic_panel import OfficerSkillController
 from world_panel import WorldEditorController
 
@@ -93,6 +97,7 @@ class San14TrainerApp(tk.Tk):
         self.location_snapshots: dict[str, tuple[int, bytes]] = {}
         self.location_status = {kind: tk.StringVar(value="自动识别 · 等待详情") for kind in LIVE_RECORD_FIELDS}
         self.officer_snapshot: Optional[tuple[OfficerFollowTarget, tuple[int, bytes]]] = None
+        self.custom_aura_self_var = tk.BooleanVar(value=False)
         self.follow_cache_path = self.profile_path.with_name("officer_follow_session.json")
         self.follow_status = tk.StringVar(value="跟随已校准 · 请打开武将详情")
         self.selected_record_addrs: Dict[str, int] = {}
@@ -386,6 +391,15 @@ class San14TrainerApp(tk.Tk):
                         ).pack(side=tk.LEFT)
                 for f in table.fields:
                     self._render_option_row(column, table_key, f)
+                if table_key == "global":
+                    aura_row = ttk.Frame(column, padding=(0, 4, 0, 2))
+                    aura_row.pack(fill=tk.X)
+                    ttk.Checkbutton(
+                        aura_row,
+                        text="自创友军光环单槽双吃（仅 256~355：1槽同时生效自身+友军）",
+                        variable=self.custom_aura_self_var,
+                        command=self._toggle_custom_aura_self_patch,
+                    ).pack(side=tk.LEFT)
         if not getattr(self, "_wheel_bound", False):
             self.bind_all("<MouseWheel>", self._scroll_options, add="+")
             self._wheel_bound = True
@@ -570,10 +584,34 @@ class San14TrainerApp(tk.Tk):
     def _restore_officer_follow(self) -> None:
         self.officer_follow = OfficerFollowTarget.load(self.mem, self.follow_cache_path)
         self.officer_auto_enabled = supported_executable(self.mem)
+        self._sync_custom_aura_patch_state()
         if hasattr(self, "skill_controller"):
             self.skill_controller.on_process_attached()
         if hasattr(self, "world_controller"):
             self.world_controller.on_process_attached()
+
+    def _sync_custom_aura_patch_state(self) -> None:
+        self.custom_aura_self_var.set(is_custom_aura_self_patch_enabled(self.mem))
+
+    def _toggle_custom_aura_self_patch(self, parent: Optional[tk.Widget] = None) -> None:
+        want = bool(self.custom_aura_self_var.get())
+        if not self.mem.is_attached:
+            self.custom_aura_self_var.set(False)
+            self.status_var.set("请先连接游戏进程 SAN14CE_SC.exe")
+            messagebox.showwarning("提示", "请先连接游戏进程 SAN14CE_SC.exe 后再开启该开关。", parent=parent or self)
+            return
+        try:
+            active = set_custom_aura_self_patch(self.mem, want)
+            self.custom_aura_self_var.set(active)
+            if active:
+                self.status_var.set("已开启：自创友军光环单槽双吃（仅 256~355，自身+友军同步生效，不影响原版神将/奸雄）")
+            else:
+                self.status_var.set("已关闭：自创友军光环单槽双吃（已还原游戏原始代码）")
+            self._play_beep(active)
+        except MemoryErrorWin32 as exc:
+            self._sync_custom_aura_patch_state()
+            self.status_var.set(f"自创光环单槽双吃切换失败：{exc}")
+            messagebox.showerror("操作失败", str(exc), parent=parent or self)
         self.officer_auto_poll_at = 0.0
         self.officer_auto_snapshot = None
         self.location_snapshots.clear()
@@ -1646,6 +1684,7 @@ class San14TrainerApp(tk.Tk):
         self._disable_all_toggles()
         try:
             cnt = self.mem.undo_all()
+            self._sync_custom_aura_patch_state()
             self.status_var.set(f"已恢复 {cnt} 条修改")
         except MemoryErrorWin32 as exc:
             messagebox.showerror("恢复失败", str(exc))

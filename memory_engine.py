@@ -146,6 +146,22 @@ kernel32.VirtualQueryEx.argtypes = [
 kernel32.VirtualQueryEx.restype = ctypes.c_size_t
 kernel32.GetSystemInfo.argtypes = [ctypes.POINTER(SYSTEM_INFO)]
 kernel32.GetSystemInfo.restype = None
+kernel32.VirtualProtectEx.argtypes = [
+    wintypes.HANDLE,
+    ctypes.c_void_p,
+    ctypes.c_size_t,
+    wintypes.DWORD,
+    ctypes.POINTER(wintypes.DWORD),
+]
+kernel32.VirtualProtectEx.restype = wintypes.BOOL
+kernel32.FlushInstructionCache.argtypes = [
+    wintypes.HANDLE,
+    ctypes.c_void_p,
+    ctypes.c_size_t,
+]
+kernel32.FlushInstructionCache.restype = wintypes.BOOL
+
+PAGE_EXECUTE_READWRITE = 0x40
 
 
 TYPE_FORMATS = {
@@ -173,6 +189,7 @@ class MemoryPatch:
     original_bytes: bytes
     new_bytes: bytes
     label: str
+    is_code: bool = False
 
 
 class MemoryErrorWin32(RuntimeError):
@@ -315,6 +332,56 @@ class ProcessMemory:
                 )
             )
 
+    def write_code_bytes(
+        self, address: int, data: bytes, record_patch: bool = True, label: str = ""
+    ) -> None:
+        """向只读可执行代码段写入字节（自动切换页保护并刷新指令缓存）。"""
+        handle = self._ensure_attached()
+        if address <= 0 or not data:
+            raise MemoryErrorWin32(f"无效的代码写入参数: addr={hex(address)}")
+        original = b""
+        if record_patch:
+            original = self.read_bytes(address, len(data))
+        old_protect = wintypes.DWORD(0)
+        if not kernel32.VirtualProtectEx(
+            handle,
+            ctypes.c_void_p(address),
+            len(data),
+            PAGE_EXECUTE_READWRITE,
+            ctypes.byref(old_protect),
+        ):
+            err = ctypes.get_last_error()
+            raise MemoryErrorWin32(f"修改代码页保护 {hex(address)} 失败 (err={err})")
+        try:
+            buf = (ctypes.c_ubyte * len(data)).from_buffer_copy(data)
+            bytes_written = ctypes.c_size_t(0)
+            ok = kernel32.WriteProcessMemory(
+                handle, ctypes.c_void_p(address), buf, len(data), ctypes.byref(bytes_written)
+            )
+            if not ok or bytes_written.value != len(data):
+                err = ctypes.get_last_error()
+                raise MemoryErrorWin32(f"写入代码内存 {hex(address)} 失败 (err={err})")
+        finally:
+            tmp_protect = wintypes.DWORD(0)
+            kernel32.VirtualProtectEx(
+                handle,
+                ctypes.c_void_p(address),
+                len(data),
+                old_protect.value,
+                ctypes.byref(tmp_protect),
+            )
+            kernel32.FlushInstructionCache(handle, ctypes.c_void_p(address), len(data))
+        if record_patch and original:
+            self.patch_history.append(
+                MemoryPatch(
+                    address=address,
+                    original_bytes=original,
+                    new_bytes=bytes(data),
+                    label=label or hex(address),
+                    is_code=True,
+                )
+            )
+
     def read_value(self, address: int, dtype: str) -> int | float:
         fmt, size = TYPE_FORMATS[dtype]
         raw = self.read_bytes(address, size)
@@ -355,13 +422,19 @@ class ProcessMemory:
         if index < 0 or index >= len(self.patch_history):
             return
         patch = self.patch_history.pop(index)
-        self.write_bytes(patch.address, patch.original_bytes, record_patch=False)
+        if patch.is_code:
+            self.write_code_bytes(patch.address, patch.original_bytes, record_patch=False)
+        else:
+            self.write_bytes(patch.address, patch.original_bytes, record_patch=False)
 
     def undo_all(self) -> int:
         count = 0
         while self.patch_history:
             patch = self.patch_history.pop()
-            self.write_bytes(patch.address, patch.original_bytes, record_patch=False)
+            if patch.is_code:
+                self.write_code_bytes(patch.address, patch.original_bytes, record_patch=False)
+            else:
+                self.write_bytes(patch.address, patch.original_bytes, record_patch=False)
             count += 1
         return count
 

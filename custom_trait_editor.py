@@ -155,8 +155,8 @@ DUAL_SELF_AURA_COND1 = 99
 # Verified condition IDs (+0xA4)
 TRAIT_COND1_OPTIONS: Tuple[Tuple[int, str], ...] = (
     (0, "无条件 · 自身自部队常驻生效（全地形全兵种无限制！）"),
-    (DUAL_SELF_AURA_COND1, "自身+光环双吃 · 自身与范围内友军同时生效（自动生成自身+光环双槽）"),
-    (9, "仅友军光环 · 范围内己方其他部队生效（原版奸雄/神将，不含自身）"),
+    (9, "友军光环 · 范围内友军生效（开启「自创光环单槽双吃」后同时对自身生效！）"),
+    (DUAL_SELF_AURA_COND1, "纯数据双槽双吃 · 自动生成自身+光环2个槽（不开修改器存档也永久双吃）"),
     (10, "敌军光环 · 范围内敌方部队生效（配合负值削弱敌军）"),
     (12, "条件 · 仅兵器阵型时生效"),
     (14, "条件 · 位于大河/水战时生效"),
@@ -302,14 +302,14 @@ CUSTOM_TRAIT_TEMPLATES: Tuple[CustomTraitDef, ...] = (
     CustomTraitDef(
         slot_id=261,
         name="霸主光环",
-        description="自身及范围3格内友军全能力大幅上升(+30)，且士气极不易下降",
+        description="范围内友军全能力大幅上升(+30)，且士气极不易下降（开单槽双吃自身同步生效）",
         color=3,
         eff1_id=19,
         eff1_val=30,
         eff2_id=13,
         eff2_val=80,
-        cond1=DUAL_SELF_AURA_COND1,
-        cond2=0,
+        cond1=9,
+        cond2=1,
         cond1_param=3,
     ),
 )
@@ -494,6 +494,10 @@ def normalize_custom_trait(trait: CustomTraitDef) -> CustomTraitDef:
     color = int(trait.color) if int(trait.color) in (0, 1, 2, 3, 5) else 3
     cond1 = max(0, min(100, int(trait.cond1)))
     cond2 = max(0, min(100, int(trait.cond2)))
+    if cond1 != 0 and cond1 != DUAL_SELF_AURA_COND1 and cond2 == 0:
+        # SAN14CE's aura/condition evaluator (0x282CA0 -> 0x27FDF0 slot 2) requires cond2 != 0
+        # for non-zero cond1; cond2=1 matches all active units (including ships & siege).
+        cond2 = 1
     cond1_param = max(0, min(99999, int(trait.cond1_param)))
     if cond1 in AURA_COND1_IDS and cond1_param == 0:
         cond1_param = 3
@@ -847,3 +851,278 @@ def save_custom_traits_file(path: Path, traits: Dict[int, CustomTraitDef]) -> No
     path.parent.mkdir(parents=True, exist_ok=True)
     ordered = [traits[k].to_dict() for k in sorted(traits)]
     path.write_text(json.dumps(ordered, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# Runtime code patch: Single-slot Self + Friendly Aura for custom traits (256..355)
+# Verified against SAN14CE_SC.exe (SHA-256: 2e49348a...458a239)
+# ---------------------------------------------------------------------------
+GET_RADIUS_CALL_RVA = 0x27FE7A
+GET_RADIUS_CALL_ORIG = b"\xe8\xf1\xdd\xfa\xff"  # call 0x22DC70 (get_radius)
+GET_RADIUS_RVA = 0x22DC70
+GET_PERSONALITY_ID_RVA = 0x22F780  # leaf: (CPersonalityData* - ptable) / 0xE8
+
+COND9_TABLE_LEA_RVA = 0x27FEED
+COND9_TABLE_LEA_ORIG = b"\x48\x8d\x05\xcc\x5c\x00\x00"  # lea rax, [rip+0x5CCC] -> 0x285BC0
+COND9_DISP32_RVA = 0x27FEF0
+COND9_ORIG_RVA = 0x285BC0
+IS_UNIT_VALID_RVA = 0x332410
+ADD_UNIT_LIST_RVA = 0x25A7D0
+
+AURA_SELF_BRANCH_RVA = 0x28314C
+AURA_SELF_BRANCH_ORIG = b"\x0f\x85\x8e\x00\x00\x00"  # jne 0x2831E0
+AURA_SELF_FALLTHROUGH_RVA = 0x283152
+AURA_SELF_TARGET_RVA = 0x2831E0
+
+CUSTOM_AURA_CAVE1_RVA = 0x1344400  # .text tail executable slack (cond[9] trampoline)
+CUSTOM_AURA_CAVE2_RVA = 0x13444A0  # .text tail executable slack (0x282CA0 self->aura_slots trampoline)
+CUSTOM_AURA_CAVE0_RVA = 0x1344500  # .text tail executable slack (get_radius hook: tags r12d with slot_id)
+CUSTOM_AURA_PATCH_LABEL_PREFIX = "自创光环单槽双吃"
+
+
+def build_custom_aura_self_patch_bytes() -> Tuple[bytes, bytes, bytes, bytes, bytes, bytes]:
+    """Assemble (cave0, cave1, cave2, radius_call, cond9_disp32, branch_jmp) for SAN14CE_SC.exe.
+
+    Only affects custom traits (slot_id 256..355) with cond1 == 9 (friendly aura):
+    0. Cave 0 intercepts `call get_radius` (0x27FE7A) while `rcx = rbx = CPersonalityData*`, calls
+       `CPersonalityData::GetId()` (0x22F780), and for cond1==9 & cond_slot==1 & slot_id in 256..355
+       tags `r12d = 0x10000 | slot_id` before tail-calling `get_radius` (0x22DC70).
+    1. Cave 1 intercepts `cond[9]` (0x27FEF0), checks `r9d` in `0x10100..0x10163`, clears `r9d = 0`,
+       calls original `cond[9]` to collect surrounding allies, and ALSO adds `self_unit` to `out_list`.
+    2. Cave 2 intercepts 0x28314C in `0x282CA0` when `target_unit == caster_unit`, calls `GetId(r15)`
+       and for custom `cond1==9` traits (256..355) routes self into `aura_slots (+0x64)` instead of
+       `own_active_bitmask (+0x1BC)` so that:
+       - `own_active_bitmask` stays 0 -> 0x2FF650 keeps broadcasting to newly arriving allies;
+       - `0x26BD50` applies exact 1x buff on map (Loop 1) AND in march-out preview (Loop 2).
+    Built-in traits (<256, e.g. 神将/奸雄) immediately take the fast-path to vanilla code.
+    """
+    # --- Cave 0 @ 0x1344500: tag r12d with (0x10000 | slot_id) for custom cond1==9 traits ---
+    c0 = bytearray()
+
+    def emit0(data: bytes) -> None:
+        c0.extend(data)
+
+    def emit0_call32(target_rva: int) -> None:
+        emit0(b"\xe8")
+        next_rva = CUSTOM_AURA_CAVE0_RVA + len(c0) + 4
+        emit0(struct.pack("<i", target_rva - next_rva))
+
+    def emit0_jmp32(target_rva: int) -> None:
+        emit0(b"\xe9")
+        next_rva = CUSTOM_AURA_CAVE0_RVA + len(c0) + 4
+        emit0(struct.pack("<i", target_rva - next_rva))
+
+    emit0(b"\x83\xff\x09")                        # cmp edi, 9 (cond1 == 9?)
+    j0_1 = len(c0)
+    emit0(b"\x75\x00")                            # jne call_radius
+    emit0(b"\x41\x83\xfe\x01")                    # cmp r14d, 1 (cond_slot == 1?)
+    j0_2 = len(c0)
+    emit0(b"\x75\x00")                            # jne call_radius
+    emit0_call32(GET_PERSONALITY_ID_RVA)          # call GetId(rcx) -> eax = slot_id (leaf)
+    emit0(b"\x89\xc1")                            # mov ecx, eax
+    emit0(b"\x81\xe9\x00\x01\x00\x00")            # sub ecx, 256
+    emit0(b"\x83\xf9\x63")                        # cmp ecx, 99
+    j0_3 = len(c0)
+    emit0(b"\x77\x00")                            # ja restore_rcx
+    emit0(b"\x0d\x00\x00\x01\x00")                # or eax, 0x10000
+    emit0(b"\x44\x8b\xe0")                        # mov r12d, eax
+    restore_rcx_pos = len(c0)
+    c0[j0_3 + 1] = restore_rcx_pos - (j0_3 + 2)
+    emit0(b"\x48\x8b\xcb")                        # mov rcx, rbx (restore CPersonalityData*)
+    call_radius_pos = len(c0)
+    c0[j0_1 + 1] = call_radius_pos - (j0_1 + 2)
+    c0[j0_2 + 1] = call_radius_pos - (j0_2 + 2)
+    emit0_jmp32(GET_RADIUS_RVA)                   # jmp get_radius
+
+    # --- Cave 1 @ 0x1344400: cond[9] trampoline ---
+    c1 = bytearray()
+
+    def emit1(data: bytes) -> None:
+        c1.extend(data)
+
+    def emit1_jcc32(op2: bytes, target_rva: int) -> None:
+        emit1(op2)
+        next_rva = CUSTOM_AURA_CAVE1_RVA + len(c1) + 4
+        emit1(struct.pack("<i", target_rva - next_rva))
+
+    def emit1_call32(target_rva: int) -> None:
+        emit1(b"\xe8")
+        next_rva = CUSTOM_AURA_CAVE1_RVA + len(c1) + 4
+        emit1(struct.pack("<i", target_rva - next_rva))
+
+    # Fast-path guard: cond1 == 9, tagged r9d in 0x10100..0x10163, cond_slot == 1
+    emit1(b"\x83\xf9\x09")                        # cmp ecx, 9
+    emit1_jcc32(b"\x0f\x85", COND9_ORIG_RVA)      # jne orig_cond9
+    emit1(b"\x44\x89\xc8")                        # mov eax, r9d (tagged slot_id)
+    emit1(b"\x2d\x00\x01\x01\x00")                # sub eax, 0x10100
+    emit1(b"\x83\xf8\x63")                        # cmp eax, 99
+    emit1_jcc32(b"\x0f\x87", COND9_ORIG_RVA)      # ja orig_cond9
+    emit1(b"\x83\x7c\x24\x28\x01")                # cmp dword ptr [rsp+0x28], 1
+    emit1_jcc32(b"\x0f\x85", COND9_ORIG_RVA)      # jne orig_cond9
+
+    # Custom trait path: restore r9d = 0 (no officer_id filter), align stack to 16B
+    emit1(b"\x45\x31\xc9")                        # xor r9d, r9d
+    emit1(b"\x53")                                # push rbx
+    emit1(b"\x56")                                # push rsi
+    emit1(b"\x48\x83\xec\x48")                    # sub rsp, 0x48
+    emit1(b"\x49\x8b\xd8")                        # mov rbx, r8 (self_unit)
+    emit1(b"\x48\x8b\xb4\x24\x90\x00\x00\x00")    # mov rsi, [rsp+0x90] (out_list)
+    emit1(b"\xc7\x44\x24\x20\x01\x00\x00\x00")    # mov dword ptr [rsp+0x20], 1 (cond_slot)
+    emit1(b"\x8b\x84\x24\x88\x00\x00\x00")        # mov eax, [rsp+0x88] (radius)
+    emit1(b"\x89\x44\x24\x28")                    # mov [rsp+0x28], eax
+    emit1(b"\x48\x89\x74\x24\x30")                # mov [rsp+0x30], rsi
+    emit1_call32(COND9_ORIG_RVA)                  # call orig_cond9
+    emit1(b"\x89\x44\x24\x38")                    # mov [rsp+0x38], eax
+    emit1(b"\x48\x8b\xcb")                        # mov rcx, rbx
+    emit1_call32(IS_UNIT_VALID_RVA)               # call is_unit_valid(self_unit)
+    emit1(b"\x85\xc0")                            # test eax, eax
+    jz_pos = len(c1)
+    emit1(b"\x74\x00")                            # jz restore_orig
+    emit1(b"\x4c\x8b\xc6")                        # mov r8, rsi (out_list)
+    emit1(b"\xba\x01\x00\x00\x00")                # mov edx, 1 (cond_slot)
+    emit1(b"\x48\x8b\xcb")                        # mov rcx, rbx (self_unit)
+    emit1_call32(ADD_UNIT_LIST_RVA)               # call add_unit_to_list(self_unit, 1, out_list)
+    emit1(b"\xb8\x01\x00\x00\x00")                # mov eax, 1
+    jmp_pos = len(c1)
+    emit1(b"\xeb\x00")                            # jmp epilogue
+    restore_pos = len(c1)
+    c1[jz_pos + 1] = restore_pos - (jz_pos + 2)
+    emit1(b"\x8b\x44\x24\x38")                    # mov eax, [rsp+0x38]
+    epilogue_pos = len(c1)
+    c1[jmp_pos + 1] = epilogue_pos - (jmp_pos + 2)
+    emit1(b"\x48\x83\xc4\x48")                    # add rsp, 0x48
+    emit1(b"\x5e")                                # pop rsi
+    emit1(b"\x5b")                                # pop rbx
+    emit1(b"\xc3")                                # ret
+    assert len(c1) <= (CUSTOM_AURA_CAVE2_RVA - CUSTOM_AURA_CAVE1_RVA)
+
+    # --- Cave 2 @ 0x13444A0: 0x282CA0 self-to-aura_slots routing ---
+    c2 = bytearray()
+
+    def emit2(data: bytes) -> None:
+        c2.extend(data)
+
+    def emit2_jcc32(op2: bytes, target_rva: int) -> None:
+        emit2(op2)
+        next_rva = CUSTOM_AURA_CAVE2_RVA + len(c2) + 4
+        emit2(struct.pack("<i", target_rva - next_rva))
+
+    def emit2_call32(target_rva: int) -> None:
+        emit2(b"\xe8")
+        next_rva = CUSTOM_AURA_CAVE2_RVA + len(c2) + 4
+        emit2(struct.pack("<i", target_rva - next_rva))
+
+    def emit2_jmp32(target_rva: int) -> None:
+        emit2(b"\xe9")
+        next_rva = CUSTOM_AURA_CAVE2_RVA + len(c2) + 4
+        emit2(struct.pack("<i", target_rva - next_rva))
+
+    # Entered from 0x28314C with flags from `cmp eax, edi` intact; r15 = CPersonalityData*
+    emit2_jcc32(b"\x0f\x85", AURA_SELF_TARGET_RVA)       # jne 0x2831E0 (other unit)
+    emit2(b"\x41\x80\xbf\xa4\x00\x00\x00\x09")           # cmp byte ptr [r15+0xA4], 9
+    emit2_jcc32(b"\x0f\x85", AURA_SELF_FALLTHROUGH_RVA)  # jne 0x283152 (non-aura self)
+    emit2(b"\x4c\x89\xf9")                               # mov rcx, r15 (CPersonalityData*)
+    emit2_call32(GET_PERSONALITY_ID_RVA)                 # call GetId(r15) -> eax = slot_id (leaf)
+    emit2(b"\x2d\x00\x01\x00\x00")                       # sub eax, 256
+    emit2(b"\x83\xf8\x63")                               # cmp eax, 99
+    emit2_jcc32(b"\x0f\x86", AURA_SELF_TARGET_RVA)       # jbe 0x2831E0 (custom aura -> aura_slots)
+    emit2_jmp32(AURA_SELF_FALLTHROUGH_RVA)               # jmp 0x283152 (vanilla -> normal self)
+    assert len(c2) <= (CUSTOM_AURA_CAVE0_RVA - CUSTOM_AURA_CAVE2_RVA)
+
+    radius_call = b"\xe8" + struct.pack("<i", CUSTOM_AURA_CAVE0_RVA - (GET_RADIUS_CALL_RVA + 5))
+    cond9_disp32 = struct.pack("<i", CUSTOM_AURA_CAVE1_RVA - (COND9_TABLE_LEA_RVA + 7))
+    branch_jmp = b"\xe9" + struct.pack("<i", CUSTOM_AURA_CAVE2_RVA - (AURA_SELF_BRANCH_RVA + 5)) + b"\x90"
+    return bytes(c0), bytes(c1), bytes(c2), radius_call, cond9_disp32, branch_jmp
+
+
+def is_custom_aura_self_patch_enabled(mem: ProcessMemory) -> bool:
+    """Check whether the single-slot custom friendly-aura self-buff code patch is active."""
+    if not mem.is_attached or not mem.base_address or not supported_executable(mem):
+        return False
+    try:
+        _, _, _, radius_call, cond9_disp32, branch_jmp = build_custom_aura_self_patch_bytes()
+        rad_now = mem.read_bytes(mem.base_address + GET_RADIUS_CALL_RVA, 5)
+        lea_now = mem.read_bytes(mem.base_address + COND9_TABLE_LEA_RVA, 7)
+        br_now = mem.read_bytes(mem.base_address + AURA_SELF_BRANCH_RVA, 6)
+        return (
+            rad_now == radius_call
+            and lea_now == (b"\x48\x8d\x05" + cond9_disp32)
+            and br_now == branch_jmp
+        )
+    except MemoryErrorWin32:
+        return False
+
+
+def set_custom_aura_self_patch(mem: ProcessMemory, enabled: bool) -> bool:
+    """Enable or disable single-slot Self + Friendly Aura for custom traits (256..355)."""
+    if not mem.is_attached or not mem.base_address:
+        raise MemoryErrorWin32("请先连接游戏进程 SAN14CE_SC.exe。")
+    if not supported_executable(mem):
+        raise MemoryErrorWin32("自创光环单槽双吃补丁仅支持简体中文传承版 SAN14CE_SC.exe。")
+
+    base = mem.base_address
+    c0, c1, c2, radius_call, cond9_disp32, branch_jmp = build_custom_aura_self_patch_bytes()
+    patched_lea = b"\x48\x8d\x05" + cond9_disp32
+
+    rad_now = mem.read_bytes(base + GET_RADIUS_CALL_RVA, 5)
+    lea_now = mem.read_bytes(base + COND9_TABLE_LEA_RVA, 7)
+    br_now = mem.read_bytes(base + AURA_SELF_BRANCH_RVA, 6)
+    cave0_now = mem.read_bytes(base + CUSTOM_AURA_CAVE0_RVA, len(c0))
+    cave1_now = mem.read_bytes(base + CUSTOM_AURA_CAVE1_RVA, len(c1))
+    cave2_now = mem.read_bytes(base + CUSTOM_AURA_CAVE2_RVA, len(c2))
+
+    if enabled:
+        if (
+            rad_now == radius_call
+            and lea_now == patched_lea
+            and br_now == branch_jmp
+            and cave0_now == c0
+            and cave1_now == c1
+            and cave2_now == c2
+        ):
+            return True
+        if (
+            rad_now not in (GET_RADIUS_CALL_ORIG, radius_call)
+            or lea_now not in (COND9_TABLE_LEA_ORIG, patched_lea)
+            or br_now not in (AURA_SELF_BRANCH_ORIG, branch_jmp)
+        ):
+            raise MemoryErrorWin32("游戏代码特征校验失败（版本不匹配或已被其他补丁修改），已拒绝写入。")
+        if any(b != 0 for b in cave0_now) and cave0_now != c0:
+            raise MemoryErrorWin32("代码段空闲区 0 非空，已拒绝写入。")
+        if any(b != 0 for b in cave1_now) and cave1_now != c1:
+            raise MemoryErrorWin32("代码段空闲区 1 非空，已拒绝写入。")
+        if any(b != 0 for b in cave2_now) and cave2_now != c2:
+            raise MemoryErrorWin32("代码段空闲区 2 非空，已拒绝写入。")
+
+        # Write trampolines first, then hook sites (race-free; LIFO undo reverses cleanly)
+        mem.write_code_bytes(base + CUSTOM_AURA_CAVE0_RVA, c0, record_patch=True, label=f"{CUSTOM_AURA_PATCH_LABEL_PREFIX}.跳板0")
+        mem.write_code_bytes(base + CUSTOM_AURA_CAVE1_RVA, c1, record_patch=True, label=f"{CUSTOM_AURA_PATCH_LABEL_PREFIX}.跳板1")
+        mem.write_code_bytes(base + CUSTOM_AURA_CAVE2_RVA, c2, record_patch=True, label=f"{CUSTOM_AURA_PATCH_LABEL_PREFIX}.跳板2")
+        mem.write_code_bytes(base + GET_RADIUS_CALL_RVA, radius_call, record_patch=True, label=f"{CUSTOM_AURA_PATCH_LABEL_PREFIX}.id标记")
+        mem.write_code_bytes(base + COND9_DISP32_RVA, cond9_disp32, record_patch=True, label=f"{CUSTOM_AURA_PATCH_LABEL_PREFIX}.cond9")
+        mem.write_code_bytes(base + AURA_SELF_BRANCH_RVA, branch_jmp, record_patch=True, label=f"{CUSTOM_AURA_PATCH_LABEL_PREFIX}.aura路由")
+
+        if not is_custom_aura_self_patch_enabled(mem):
+            raise MemoryErrorWin32("补丁写入后回读校验失败。")
+        return True
+
+    # Disable: restore hooks first, then zero trampolines (race-free order)
+    if rad_now == GET_RADIUS_CALL_ORIG and lea_now == COND9_TABLE_LEA_ORIG and br_now == AURA_SELF_BRANCH_ORIG:
+        return False
+    if (
+        rad_now not in (GET_RADIUS_CALL_ORIG, radius_call)
+        or lea_now not in (COND9_TABLE_LEA_ORIG, patched_lea)
+        or br_now not in (AURA_SELF_BRANCH_ORIG, branch_jmp)
+    ):
+        raise MemoryErrorWin32("游戏代码特征校验失败，无法安全还原。")
+
+    mem.write_code_bytes(base + AURA_SELF_BRANCH_RVA, AURA_SELF_BRANCH_ORIG, record_patch=False)
+    mem.write_code_bytes(base + COND9_DISP32_RVA, COND9_TABLE_LEA_ORIG[3:], record_patch=False)
+    mem.write_code_bytes(base + GET_RADIUS_CALL_RVA, GET_RADIUS_CALL_ORIG, record_patch=False)
+    mem.write_code_bytes(base + CUSTOM_AURA_CAVE2_RVA, b"\x00" * len(c2), record_patch=False)
+    mem.write_code_bytes(base + CUSTOM_AURA_CAVE1_RVA, b"\x00" * len(c1), record_patch=False)
+    mem.write_code_bytes(base + CUSTOM_AURA_CAVE0_RVA, b"\x00" * len(c0), record_patch=False)
+    mem.patch_history = [
+        p for p in mem.patch_history if not p.label.startswith(CUSTOM_AURA_PATCH_LABEL_PREFIX)
+    ]
+    return False

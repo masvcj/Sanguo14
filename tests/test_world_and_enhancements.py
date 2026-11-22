@@ -10,6 +10,13 @@ from unittest.mock import Mock, patch
 
 from app import San14TrainerApp
 from custom_trait_editor import (
+    AURA_SELF_BRANCH_ORIG,
+    AURA_SELF_BRANCH_RVA,
+    COND9_TABLE_LEA_ORIG,
+    COND9_TABLE_LEA_RVA,
+    CUSTOM_AURA_CAVE0_RVA,
+    CUSTOM_AURA_CAVE1_RVA,
+    CUSTOM_AURA_CAVE2_RVA,
     CUSTOM_TRAIT_MIN_ID,
     EDIT_MGR_PERSONALITY_ARR,
     EDIT_MGR_PTR_RVA,
@@ -17,21 +24,27 @@ from custom_trait_editor import (
     EDIT_PERSONALITY_RECORD_TYPE,
     EDIT_PERSONALITY_SLOT_COUNT,
     EDIT_PERSONALITY_STRIDE,
+    GET_RADIUS_CALL_ORIG,
+    GET_RADIUS_CALL_RVA,
     MGR_PERSONALITY_ARR,
     PERSONALITY_RECORD_TYPE,
     PERSONALITY_STRIDE,
     TOTAL_PERSONALITY_SLOTS,
     CustomTraitDef,
     auto_generate_description,
+    build_custom_aura_self_patch_bytes,
     clear_live_custom_trait,
     clear_live_edit_personality,
     find_next_free_custom_slot,
+    is_custom_aura_self_patch_enabled,
     list_live_custom_traits,
     load_custom_traits_file,
     load_edit_personality_file,
+    normalize_custom_trait,
     read_live_trait,
     save_custom_traits_file,
     save_edit_personality_file,
+    set_custom_aura_self_patch,
     write_live_custom_trait,
     write_live_edit_personality,
 )
@@ -65,7 +78,7 @@ from game_world_editor import (
     set_foreign_relation,
     write_officer_deep,
 )
-from memory_engine import MemoryErrorWin32, TYPE_FORMATS
+from memory_engine import MemoryErrorWin32, MemoryPatch, TYPE_FORMATS
 from officer_auto_locator import (
     AREA_RECORD_TYPE,
     CITY_RECORD_TYPE,
@@ -111,8 +124,29 @@ class FakeMemory:
     def write_bytes(self, addr: int, data: bytes, *, record_patch: bool = True, label: str = "") -> None:
         buf, off = self._locate(addr, len(data))
         if record_patch:
-            self.patch_history.append((addr, bytes(buf[off : off + len(data)]), label))
+            self.patch_history.append(
+                MemoryPatch(addr, bytes(buf[off : off + len(data)]), bytes(data), label, is_code=False)
+            )
         buf[off : off + len(data)] = data
+
+    def write_code_bytes(self, addr: int, data: bytes, *, record_patch: bool = True, label: str = "") -> None:
+        buf, off = self._locate(addr, len(data))
+        if record_patch:
+            self.patch_history.append(
+                MemoryPatch(addr, bytes(buf[off : off + len(data)]), bytes(data), label, is_code=True)
+            )
+        buf[off : off + len(data)] = data
+
+    def undo_all(self) -> int:
+        count = 0
+        while self.patch_history:
+            p = self.patch_history.pop()
+            if isinstance(p, MemoryPatch):
+                self.write_code_bytes(p.address, p.original_bytes, record_patch=False)
+            else:
+                self.write_bytes(p[0], p[1], record_patch=False)
+            count += 1
+        return count
 
     def read_value(self, addr: int, dtype: str) -> int:
         fmt, sz = TYPE_FORMATS[dtype]
@@ -705,6 +739,58 @@ class AppEnhancementTests(unittest.TestCase):
             clear_live_edit_personality(mem, 256)
             self.assertEqual(mem.read_value(ep_arr + 0x0A, "u16"), 0)
             self.assertEqual(mem.read_value(ep_arr + 0x08, "u8"), 2)
+
+    def test_custom_aura_single_slot_code_patch_and_cond2_normalization(self):
+        # 1. Aura traits with cond2=0 auto-normalize to cond2=1 (required by 0x282CA0)
+        aura = normalize_custom_trait(
+            CustomTraitDef(slot_id=256, name="测试光环", description="", eff1_id=19, eff1_val=30, cond1=9, cond2=0)
+        )
+        self.assertEqual(aura.cond1, 9)
+        self.assertEqual(aura.cond2, 1)
+        self.assertEqual(aura.cond1_param, 3)
+
+        # 2. Code patch assembly, enable/disable roundtrip, and LIFO undo_all
+        mem = FakeMemory(base_address=0x7FF600000000)
+        base = mem.base_address
+        b_rad = mem.alloc(base + GET_RADIUS_CALL_RVA, 16)
+        b_rad[: len(GET_RADIUS_CALL_ORIG)] = GET_RADIUS_CALL_ORIG
+        b_lea = mem.alloc(base + COND9_TABLE_LEA_RVA, 16)
+        b_lea[: len(COND9_TABLE_LEA_ORIG)] = COND9_TABLE_LEA_ORIG
+        b_br = mem.alloc(base + AURA_SELF_BRANCH_RVA, 16)
+        b_br[: len(AURA_SELF_BRANCH_ORIG)] = AURA_SELF_BRANCH_ORIG
+        mem.alloc(base + CUSTOM_AURA_CAVE1_RVA, 0x200)
+
+        c0, c1, c2, radius_call, cond9_disp32, branch_jmp = build_custom_aura_self_patch_bytes()
+        self.assertGreater(len(c0), 20)
+        self.assertLessEqual(len(c1), CUSTOM_AURA_CAVE2_RVA - CUSTOM_AURA_CAVE1_RVA)
+        self.assertLessEqual(len(c2), CUSTOM_AURA_CAVE0_RVA - CUSTOM_AURA_CAVE2_RVA)
+        self.assertEqual(len(radius_call), 5)
+        self.assertEqual(len(cond9_disp32), 4)
+        self.assertEqual(len(branch_jmp), 6)
+
+        with patch("custom_trait_editor.supported_executable", return_value=True):
+            self.assertFalse(is_custom_aura_self_patch_enabled(mem))
+            self.assertTrue(set_custom_aura_self_patch(mem, True))
+            self.assertTrue(is_custom_aura_self_patch_enabled(mem))
+            self.assertEqual(mem.read_bytes(base + CUSTOM_AURA_CAVE0_RVA, len(c0)), c0)
+            self.assertEqual(mem.read_bytes(base + CUSTOM_AURA_CAVE1_RVA, len(c1)), c1)
+            self.assertEqual(mem.read_bytes(base + CUSTOM_AURA_CAVE2_RVA, len(c2)), c2)
+            # Disable restores exact original bytes and clears patch_history entries
+            self.assertFalse(set_custom_aura_self_patch(mem, False))
+            self.assertFalse(is_custom_aura_self_patch_enabled(mem))
+            self.assertEqual(mem.read_bytes(base + GET_RADIUS_CALL_RVA, 5), GET_RADIUS_CALL_ORIG)
+            self.assertEqual(mem.read_bytes(base + COND9_TABLE_LEA_RVA, 7), COND9_TABLE_LEA_ORIG)
+            self.assertEqual(mem.read_bytes(base + AURA_SELF_BRANCH_RVA, 6), AURA_SELF_BRANCH_ORIG)
+            self.assertEqual(mem.read_bytes(base + CUSTOM_AURA_CAVE0_RVA, len(c0)), b"\x00" * len(c0))
+            self.assertEqual(mem.read_bytes(base + CUSTOM_AURA_CAVE1_RVA, len(c1)), b"\x00" * len(c1))
+            self.assertEqual(mem.patch_history, [])
+            # Re-enable then undo_all also restores cleanly in LIFO order
+            self.assertTrue(set_custom_aura_self_patch(mem, True))
+            self.assertEqual(mem.undo_all(), 6)
+            self.assertFalse(is_custom_aura_self_patch_enabled(mem))
+            self.assertEqual(mem.read_bytes(base + GET_RADIUS_CALL_RVA, 5), GET_RADIUS_CALL_ORIG)
+            self.assertEqual(mem.read_bytes(base + COND9_TABLE_LEA_RVA, 7), COND9_TABLE_LEA_ORIG)
+            self.assertEqual(mem.read_bytes(base + AURA_SELF_BRANCH_RVA, 6), AURA_SELF_BRANCH_ORIG)
 
 
 if __name__ == "__main__":
